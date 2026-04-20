@@ -1,7 +1,8 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
-import { Canvas } from "@react-three/fiber";
-import { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import { Vector2 } from "three";
 
 const shader1 = `
 #ifdef GL_ES
@@ -23,35 +24,59 @@ void main() {
 }
 `;
 
-const Farbfleck = () => {
-  const shaderRef = useRef<any>(null!);
+const vertexShader = `
+void main() {
+    gl_Position = vec4( position, 1 );
+}
+`;
 
+const Farbfleck = () => {
   return (
     <div>
       <div>das steht oben</div>
       <div>
-        {/* <Canvas>
-            <mesh>
-              <shaderMaterial
-                ref={shaderRef}
-                fragmentShader={shader1}
-              ></shaderMaterial>
-            </mesh>
-          </Canvas> */}
         <Canvas>
-          <mesh>
-            <boxGeometry args={[2, 2, 2]} />
-            <shaderMaterial
-              ref={shaderRef}
-              fragmentShader={shader1}
-            ></shaderMaterial>
-            <meshPhongMaterial />
-          </mesh>
-          <ambientLight intensity={0.1} />
-          <directionalLight position={[0, 0, 5]} color="red" />
+          <ActualShader></ActualShader>
         </Canvas>
       </div>
     </div>
+  );
+};
+
+const ActualShader = () => {
+  const shaderRef = useRef<any>(null!);
+
+  const uniforms = useMemo(
+    () => ({
+      u_time: { value: 0 },
+      u_resolution: { value: new Vector2(1, 1) },
+    }),
+    [],
+  );
+
+  useFrame((state) => {
+    if (shaderRef.current) {
+      const { width, height } = state.size;
+      const dpr = state.viewport.dpr;
+
+      shaderRef.current.uniforms.u_time.value = state.clock.elapsedTime;
+      shaderRef.current.uniforms.u_resolution.value.set(
+        width * dpr,
+        height * dpr,
+      );
+    }
+  });
+
+  return (
+    <mesh>
+      <planeGeometry args={[2, 2]} />
+      <shaderMaterial
+        ref={shaderRef}
+        fragmentShader={shader1}
+        vertexShader={vertexShader}
+        uniforms={uniforms}
+      />
+    </mesh>
   );
 };
 
