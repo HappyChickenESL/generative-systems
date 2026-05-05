@@ -11,6 +11,10 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { farbfleckRoute } from "./pages/farbfleck/Farbfleck";
+import { testRoute } from "./Test";
+import { unwahrscheinlichRoute } from "./pages/unwahrscheinlich/Unwahrscheinlich";
+import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
+import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -33,7 +37,14 @@ const homeRoute = createRoute({
   path: "/",
 });
 
-const routeTree = rootRoute.addChildren([homeRoute, farbfleckRoute]);
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  farbfleckRoute,
+  unwahrscheinlichRoute,
+  testRoute,
+  bodyProblemRoute,
+  threeBodyProblemRoute,
+]);
 
 const router = createRouter({ routeTree });
 

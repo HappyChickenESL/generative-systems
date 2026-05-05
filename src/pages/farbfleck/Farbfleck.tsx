@@ -1,10 +1,11 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
-import { Vector2 } from "three";
+import { Canvas } from "@react-three/fiber";
+import type { JSX } from "react";
+import { Splash3 } from "./components/Splash3";
+import { OrbitControls } from "@react-three/drei";
 
-const shader1 = `
+const colorShader = `
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -24,59 +25,29 @@ void main() {
 }
 `;
 
-const vertexShader = `
-void main() {
-    gl_Position = vec4( position, 1 );
-}
-`;
-
 const Farbfleck = () => {
-  return (
-    <div>
-      <div>das steht oben</div>
-      <div>
-        <Canvas>
-          <ActualShader></ActualShader>
-        </Canvas>
-      </div>
-    </div>
-  );
-};
+  const arr: JSX.Element[] = [];
 
-const ActualShader = () => {
-  const shaderRef = useRef<any>(null!);
+  const rand = (min: number, max: number) => Math.random() * (max - min) + min;
 
-  const uniforms = useMemo(
-    () => ({
-      u_time: { value: 0 },
-      u_resolution: { value: new Vector2(1, 1) },
-    }),
-    [],
-  );
-
-  useFrame((state) => {
-    if (shaderRef.current) {
-      const { width, height } = state.size;
-      const dpr = state.viewport.dpr;
-
-      shaderRef.current.uniforms.u_time.value = state.clock.elapsedTime;
-      shaderRef.current.uniforms.u_resolution.value.set(
-        width * dpr,
-        height * dpr,
-      );
-    }
-  });
+  for (let i = 0; i < 1000; i++) {
+    arr.push(
+      <Splash3
+        key={i}
+        x={rand(-10, 10)}
+        y={rand(-10, 10)}
+        z={rand(-10, 10)}
+        size={1}
+      ></Splash3>,
+    );
+  }
 
   return (
-    <mesh>
-      <planeGeometry args={[2, 2]} />
-      <shaderMaterial
-        ref={shaderRef}
-        fragmentShader={shader1}
-        vertexShader={vertexShader}
-        uniforms={uniforms}
-      />
-    </mesh>
+    <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+      <OrbitControls></OrbitControls>
+      <ambientLight />
+      {arr}
+    </Canvas>
   );
 };
 
