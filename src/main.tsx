@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import "./App.css";
 import {
   createRootRoute,
   createRoute,
@@ -9,30 +10,44 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { farbfleckRoute } from "./pages/farbfleck/Farbfleck";
 import { testRoute } from "./Test";
 import { unwahrscheinlichRoute } from "./pages/unwahrscheinlich/Unwahrscheinlich";
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
+import { shapesRoute } from "./pages/drei/shapes/Shapes";
 
 export const rootRoute = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{" "}
+      <div className="flex flex-col h-full">
+        <div className="p-2 flex gap-8 h-10">
+          <Link to="/" className="[&.active]:font-bold">
+            Home
+          </Link>
+          <Link to="/farbfleck" className="[&.active]:font-bold">
+            Farbfleck (WIP)
+          </Link>
+          <Link to="/unwahrscheinlich" className="[&.active]:font-bold">
+            Unwahrscheinlich (WIP)
+          </Link>
+          <Link to="/bodyProblem/3" className="[&.active]:font-bold">
+            3 Body (WIP)
+          </Link>
+          <Link to="/shapes" className="[&.active]:font-bold">
+            Shapes
+          </Link>
+        </div>
+        <div className="flex-1 m-2">
+          <Outlet />
+        </div>
       </div>
-      <hr />
-      <Outlet />
-      <TanStackRouterDevtools />
     </>
   ),
 });
 
 const homeRoute = createRoute({
-  component: () => <>hi</>,
+  component: () => <>Home</>,
   getParentRoute: () => rootRoute,
   path: "/",
 });
@@ -44,6 +59,7 @@ const routeTree = rootRoute.addChildren([
   testRoute,
   bodyProblemRoute,
   threeBodyProblemRoute,
+  shapesRoute,
 ]);
 
 const router = createRouter({ routeTree });

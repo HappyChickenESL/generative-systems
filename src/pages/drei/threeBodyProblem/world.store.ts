@@ -15,7 +15,7 @@ interface WorldState {
   removeBody: (id: string) => void;
 }
 
-export const useWorld = create<WorldState>((set, get) => ({
+export const useWorld = create<WorldState>((set) => ({
   bodies: {
     earth: {
       mass: 100,
@@ -24,10 +24,16 @@ export const useWorld = create<WorldState>((set, get) => ({
       color: "blue",
     },
     moon: {
-      mass: 10,
+      mass: 5,
       position: new Vector3(5, 0, 0),
       velocity: new Vector3(0, 2.2, 0),
       color: "gray",
+    },
+    jupiter: {
+      mass: 20,
+      position: new Vector3(-5, -5, 0),
+      velocity: new Vector3(2, -0.5, 0),
+      color: "orange",
     },
   },
 

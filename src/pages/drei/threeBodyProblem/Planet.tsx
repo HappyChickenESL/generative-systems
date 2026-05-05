@@ -40,9 +40,11 @@ export function Planet({ id }: { id: string }) {
   const body = world.bodies[id];
 
   return (
-    <mesh ref={mesh} position={body.position}>
-      <sphereGeometry args={[body.mass * 0.02, 32, 32]} />
-      <meshStandardMaterial color={body.color} />
-    </mesh>
+    <>
+      <mesh ref={mesh} position={body.position}>
+        <sphereGeometry args={[Math.sqrt(body.mass) * 0.1, 32, 32]} />
+        <meshStandardMaterial color={body.color} />
+      </mesh>
+    </>
   );
 }

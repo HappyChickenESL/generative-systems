@@ -38,15 +38,15 @@ export const unwahrscheinlichRoute = createRoute({
   getParentRoute: () => rootRoute,
 });
 
-function randomMinMax(min: number, max: number) {
-  return gaussianRandom() * (max - min) + min;
-}
+// function randomMinMax(min: number, max: number) {
+//   return gaussianRandom() * (max - min) + min;
+// }
 
-function gaussianRandom() {
-  const mean = 0;
-  const stdev = 1;
-  const u = 1 - Math.random();
-  const v = Math.random();
-  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-  return z * stdev + mean;
-}
+// function gaussianRandom() {
+//   const mean = 0;
+//   const stdev = 1;
+//   const u = 1 - Math.random();
+//   const v = Math.random();
+//   const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+//   return z * stdev + mean;
+// }
