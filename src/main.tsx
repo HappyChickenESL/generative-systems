@@ -16,6 +16,7 @@ import { unwahrscheinlichRoute } from "./pages/unwahrscheinlich/Unwahrscheinlich
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
 import { shapesRoute } from "./pages/drei/shapes/Shapes";
+import { fokusRoute } from "./pages/fokus/Fokus";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -60,6 +61,7 @@ const routeTree = rootRoute.addChildren([
   bodyProblemRoute,
   threeBodyProblemRoute,
   shapesRoute,
+  fokusRoute,
 ]);
 
 const router = createRouter({ routeTree });
