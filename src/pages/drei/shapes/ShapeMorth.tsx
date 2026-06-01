@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
+import { random } from "culori";
 
 function createPolygon(sides: number, radius = 1) {
   const shape = new THREE.Shape();
@@ -39,16 +40,20 @@ export const ShapeMorph = ({
   x,
   y,
   scale,
+  delay,
+  maxEdges,
 }: {
   x: number;
   y: number;
   scale: number;
+  delay: number;
+  maxEdges: number;
 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const geometryRef = useRef<THREE.ShapeGeometry | null>(null);
 
-  const fromSides = useRef(4);
-  const toSides = useRef(5);
+  const fromSides = useRef(getNewSides(0, maxEdges));
+  const toSides = useRef(getNewSides(4, maxEdges));
 
   const progress = useRef(0);
   const pauseUntil = useRef(0);
@@ -58,7 +63,7 @@ export const ShapeMorph = ({
   useFrame(() => {
     const now = performance.now();
 
-    // ⛔ PAUSED: do nothing
+    // 1sec delay between morph to next stage
     if (now < pauseUntil.current) return;
 
     // progress animation
@@ -96,21 +101,34 @@ export const ShapeMorph = ({
       progress.current = 0;
 
       fromSides.current = toSides.current;
-      toSides.current += 1;
+
+      toSides.current = getNewSides(toSides.current, maxEdges);
 
       if (toSides.current > 10) {
         toSides.current = 4;
       }
 
-      // ⏱ pause for 1 second
-      pauseUntil.current = now + 1000;
+      pauseUntil.current = now + delay;
     }
   });
+
+  const rand = random("rgb");
 
   return (
     <mesh scale={scale} position={[x, y, 0]} ref={meshRef}>
       <shapeGeometry args={[createPolygon(3)]} />
-      <meshBasicMaterial color="hotpink" />
+      {/* <OrbitControls></OrbitControls> */}
+      <meshBasicMaterial color={[rand.r, rand.g, rand.b]} />
     </mesh>
   );
+};
+
+const getNewSides = (current: number, max: number) => {
+  let next = current;
+
+  while (next === current) {
+    next = Math.floor(Math.random() * (max - 3) + 3);
+  }
+
+  return next;
 };

@@ -10,33 +10,84 @@ const Shapes = () => {
 
   const [confirmedScale, setConfirmedScale] = useState(0.5);
 
+  const [delay, setDelay] = useState(500);
+  const [confirmedDelay, setConfirmedDelay] = useState(500);
+
+  const [maxEdges, setMaxEdges] = useState(8);
+  const [confirmedMaxEdges, setConfirmedMaxEdges] = useState(8);
+
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col">
-        <div>
+      <div className="w-40 flex flex-col space-y-2">
+        <div className="flex flex-col">
+          <label htmlFor="scaleInput">Scale</label>
           <input
+            id="scaleInput"
             value={scale}
             onChange={(e) => setScale(Number(e.target.value))}
             type="number"
             className="bg-white w-20"
-            title="hi"
+          ></input>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="delayInput">Delay</label>
+          <input
+            id="delayInput"
+            value={delay}
+            onChange={(e) => setDelay(Number(e.target.value))}
+            type="number"
+            className="bg-white w-20"
+          ></input>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="edgesInput">Max Edges</label>
+          <input
+            id="edgesInput"
+            value={maxEdges}
+            onChange={(e) => {
+              let newvalue = Number(e.target.value);
+              setMaxEdges(newvalue <= 4 ? 5 : newvalue);
+            }}
+            type="number"
+            className="bg-white w-20"
           ></input>
         </div>
         <div>
-          <button onClick={() => setConfirmedScale(scale)}>Reload</button>
+          <button
+            className="hover:font-bold"
+            onClick={() => {
+              setConfirmedScale(scale);
+              setConfirmedMaxEdges(maxEdges);
+              setConfirmedDelay(delay);
+            }}
+          >
+            Reload
+          </button>
         </div>
       </div>
       <div className="flex-1">
         <Canvas>
           <OrthographicCamera makeDefault zoom={120} position={[0, 0, 10]} />
-          <HookWrapper scale={confirmedScale}></HookWrapper>
+          <HookWrapper
+            delay={confirmedDelay}
+            maxEdges={confirmedMaxEdges}
+            scale={confirmedScale}
+          ></HookWrapper>
         </Canvas>
       </div>
     </div>
   );
 };
 
-const HookWrapper = ({ scale }: { scale: number }) => {
+const HookWrapper = ({
+  scale,
+  delay,
+  maxEdges,
+}: {
+  scale: number;
+  delay: number;
+  maxEdges: number;
+}) => {
   const { viewport } = useThree();
 
   const shapes = useMemo(() => {
@@ -53,20 +104,20 @@ const HookWrapper = ({ scale }: { scale: number }) => {
             x={i * 2.5 * scale}
             y={-j * 2.5 * scale}
             scale={scale}
+            maxEdges={Math.floor(maxEdges)}
+            delay={Math.ceil(delay)}
           />,
         );
       }
     }
 
     return result;
-  }, [viewport.width, viewport.height, scale]);
+  }, [viewport.width, viewport.height, scale, maxEdges, delay]);
 
   const topLeft = {
     x: -viewport.width / 2,
     y: viewport.height / 2,
   };
-
-  console.log(viewport);
 
   return <mesh position={[topLeft.x, topLeft.y, 0]}>{...shapes}</mesh>;
 };
