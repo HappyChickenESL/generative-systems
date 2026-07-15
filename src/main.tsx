@@ -17,6 +17,7 @@ import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
 import { shapesRoute } from "./pages/drei/shapes/Shapes";
 import { fokusRoute } from "./pages/fokus/Fokus";
+import { grammatikRoute } from "./pages/grammatik/Grammatik";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -62,6 +63,7 @@ const routeTree = rootRoute.addChildren([
   threeBodyProblemRoute,
   shapesRoute,
   fokusRoute,
+  grammatikRoute,
 ]);
 
 const router = createRouter({ routeTree });

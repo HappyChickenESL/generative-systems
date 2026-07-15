@@ -4,12 +4,12 @@ import { GearShape, type GearShapeType } from "./components/GearShape";
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 import type { JSX } from "react";
-import { Shape, Vector3 } from "three";
+import { Vector3 } from "three";
 import { minMaxRand } from "../../shared/utils";
 
 const Fokus = () => {
   const shapes: JSX.Element[] = [];
-  const possibleLocations: Vector3[] = [];
+  // const possibleLocations: Vector3[] = [];
   const circles: GearShapeType[] = [];
 
   for (let i = 0; i < 100; i++) {
