@@ -16,8 +16,9 @@ import { unwahrscheinlichRoute } from "./pages/2_unwahrscheinlich/Unwahrscheinli
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
 import { shapesRoute } from "./pages/3_loops/Shapes";
-import { fokusRoute } from "./pages/fokus/Fokus";
 import { grammatikRoute } from "./pages/grammatik/Grammatik";
+import { interaktionRoute } from "./pages/5_interaktion/Interaktion";
+import { fokusRoute } from "./pages/4_fokus/Fokus";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -64,6 +65,7 @@ const routeTree = rootRoute.addChildren([
   shapesRoute,
   fokusRoute,
   grammatikRoute,
+  interaktionRoute,
 ]);
 
 const router = createRouter({ routeTree });

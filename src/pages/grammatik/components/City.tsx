@@ -1,31 +1,43 @@
+import { minMaxRand } from "../../../shared/utils";
 import { interpretLSystem } from "../Grammatik";
 import { Roads } from "./Roads";
 
-const segments = interpretLSystem(generateLSystem(), 2, 25);
+type RuleSymbol = "A" | "F";
 
 export default function City() {
-  return <Roads segments={segments} />;
+  const segments = interpretLSystem(generateLSystem());
+  // return <Roads segments={segments} />;
+  return <>{...segments}</>;
 }
 
 export function generateLSystem(iterations = 5) {
-  // let current = "A";
+  let current = "A";
 
-  // const rules = {
-  //   A: "F[+A]F[-A]FA",
-  //   F: "FF",
-  // };
+  const rules: Record<RuleSymbol, () => string> = {
+    A: () => {
+      return "F[+A]F[-A]FA";
+    },
+    F: () => {
+      const rand = minMaxRand(0, 1);
+      if (rand < 0.15) {
+        return "R";
+      }
+      if (rand < 0.3) {
+        return "L";
+      }
+      return "FF";
+    },
+  };
 
-  // for (let i = 0; i < iterations; i++) {
-  //   let next = "";
+  for (let i = 0; i < iterations; i++) {
+    let next = "";
 
-  //   // for (let char of current) {
-  //     // next += rules[char] || char; // keep character if no rule
-  //   }
+    for (let char of current) {
+      next += char === "A" || char === "F" ? rules[char]() : char;
+    }
 
-  //   current = next;
-  // }
+    current = next;
+  }
 
-  // return current;
-  console.log(iterations);
-  return "A";
+  return current;
 }
