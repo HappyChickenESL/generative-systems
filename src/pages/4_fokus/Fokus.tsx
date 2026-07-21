@@ -9,29 +9,31 @@ import { minMaxRand } from "../../shared/utils";
 
 const Fokus = () => {
   const shapes: JSX.Element[] = [];
-  // const possibleLocations: Vector3[] = [];
   const circles: GearShapeType[] = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 200; i++) {
     const r = minMaxRand(0.1, 1);
-    const tH = minMaxRand(r * 0.1, r * 0.15);
-    const t = minMaxRand(6, 40);
+    let tH = minMaxRand(r * 0.1, r * 0.15);
+
+    let t = Math.floor(minMaxRand(8, 40));
 
     let position;
+    let direction = true;
 
     if (circles.length === 0) {
       position = new Vector3(0, 0, 0);
     } else {
       const possiblePos = getPossiblePositions(circles, r + tH);
-      const rand = Math.floor(minMaxRand(0, possiblePos.length - 1));
-      position = possiblePos[rand];
+      position = possiblePos[5].pos;
+      direction = possiblePos[5].direction;
     }
 
     const gearShape: GearShapeType = {
       center: position,
       radius: r,
       teeth: t,
-      toothHeight: tH,
+      toothHeight: r * 0.1,
+      direction: direction,
     };
     circles.push(gearShape);
     shapes.push(
@@ -39,12 +41,10 @@ const Fokus = () => {
     );
   }
 
-  console.log(getPossiblePositions(circles, 5));
-
   return (
     <div className="h-full flex">
       <div className="w-40 flex flex-col space-y-2"></div>
-      <div className="flex-1">
+      <div className="flex-1 border-4">
         <Canvas>
           <OrthographicCamera makeDefault zoom={120} position={[0, 0, 10]} />
           {...shapes}
@@ -55,7 +55,7 @@ const Fokus = () => {
 };
 
 const getPossiblePositions = (circles: GearShapeType[], newRadius: number) => {
-  const samples = 16;
+  const samples = 32;
   const result = [];
 
   for (const c of circles) {
@@ -69,8 +69,9 @@ const getPossiblePositions = (circles: GearShapeType[], newRadius: number) => {
 
       const p = new Vector3(x, y, 0);
 
-      let touchesAtLeastOne = false;
+      let touchCount = 0;
       let overlapsAny = false;
+      let direction = true;
 
       for (const other of circles) {
         const dist = p.distanceTo(other.center);
@@ -83,12 +84,14 @@ const getPossiblePositions = (circles: GearShapeType[], newRadius: number) => {
 
         // "touches at least one"
         if (Math.abs(dist - minDist) < 1e-2) {
-          touchesAtLeastOne = true;
+          direction = !other.direction;
+          touchCount++;
         }
       }
 
-      if (!overlapsAny && touchesAtLeastOne) {
-        result.push(p);
+      if (!overlapsAny && touchCount === 1) {
+        result.push({ pos: p, direction: direction });
+        // console.log(touchCount);
       }
     }
   }

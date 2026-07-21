@@ -1,5 +1,5 @@
 import { createRoute } from "@tanstack/react-router";
-import { rootRoute } from "../../../main";
+import { rootRoute } from "../../main";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrthographicCamera } from "@react-three/drei";
 import { useMemo, useState, type JSX } from "react";

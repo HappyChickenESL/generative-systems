@@ -10,12 +10,12 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { farbfleckRoute } from "./pages/farbfleck/Farbfleck";
+import { farbfleckRoute } from "./pages/1_farbfleck/Farbfleck";
 import { testRoute } from "./Test";
-import { unwahrscheinlichRoute } from "./pages/unwahrscheinlich/Unwahrscheinlich";
+import { unwahrscheinlichRoute } from "./pages/2_unwahrscheinlich/Unwahrscheinlich";
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
-import { shapesRoute } from "./pages/drei/shapes/Shapes";
+import { shapesRoute } from "./pages/3_loops/Shapes";
 import { fokusRoute } from "./pages/fokus/Fokus";
 import { grammatikRoute } from "./pages/grammatik/Grammatik";
 
