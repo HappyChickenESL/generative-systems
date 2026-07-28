@@ -1,12 +1,10 @@
 import { minMaxRand } from "../../../shared/utils";
 import { interpretLSystem } from "../Grammatik";
-import { Roads } from "./Roads";
 
 type RuleSymbol = "A" | "F";
 
 export default function City() {
   const segments = interpretLSystem(generateLSystem());
-  // return <Roads segments={segments} />;
   return <>{...segments}</>;
 }
 

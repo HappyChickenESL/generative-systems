@@ -77,11 +77,6 @@ export function interpretLSystem(str: string) {
         );
 
         segments.push(road);
-
-        // segments.push({
-        //   start: start,
-        //   end: end,
-        // });
         break;
       }
 

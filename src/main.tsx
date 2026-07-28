@@ -19,6 +19,7 @@ import { shapesRoute } from "./pages/3_loops/Shapes";
 import { grammatikRoute } from "./pages/grammatik/Grammatik";
 import { interaktionRoute } from "./pages/5_interaktion/Interaktion";
 import { fokusRoute } from "./pages/4_fokus/Fokus";
+import { wachstumRoute } from "./pages/7_wachstum/Wachstum";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -66,6 +67,7 @@ const routeTree = rootRoute.addChildren([
   fokusRoute,
   grammatikRoute,
   interaktionRoute,
+  wachstumRoute,
 ]);
 
 const router = createRouter({ routeTree });
