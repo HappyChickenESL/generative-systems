@@ -5,6 +5,7 @@ export const Seed = ({ size, color }: { size: number; color: string }) => {
   const shape = useMemo(() => {
     const newShape = new Shape();
     const steps = 32;
+    console.log("reloaded");
 
     for (let i = 0; i < steps; i++) {
       const theta = (i / steps) * Math.PI * 2;
