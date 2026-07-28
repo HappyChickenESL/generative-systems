@@ -1,32 +1,14 @@
-import { useMemo } from "react";
-import { Shape } from "three";
+import { useMemo, memo } from "react";
 
-export const Seed = ({ size, color }: { size: number; color: string }) => {
-  const shape = useMemo(() => {
-    const newShape = new Shape();
-    const steps = 32;
-    console.log("reloaded");
-
-    for (let i = 0; i < steps; i++) {
-      const theta = (i / steps) * Math.PI * 2;
-      const x = size * Math.cos(theta);
-      const y = size * Math.sin(theta);
-
-      if (i === 0) {
-        newShape.moveTo(x, y);
-      } else {
-        newShape.lineTo(x, y);
-      }
-    }
-
-    newShape.closePath();
-    return newShape;
-  }, [size]);
+const SeedComponent = ({ size, color }: { size: number; color: string }) => {
+  const circle = useMemo(() => <circleGeometry args={[size, 32]} />, [size]);
 
   return (
     <>
+      {circle}
       <meshBasicMaterial color={color} />
-      <shapeGeometry args={[shape]} />
     </>
   );
 };
+
+export const Seed = memo(SeedComponent);

@@ -8,6 +8,16 @@ import { random } from "culori";
 
 type ColorMode = "random" | "angle" | "radius" | "spiral";
 
+const modes: ColorMode[] = ["random", "angle", "radius", "spiral"];
+
+type SeedData = {
+  x: number;
+  y: number;
+  radius: number;
+  angle: number;
+  size: number;
+};
+
 const Wachstum = () => {
   const [zoom, setZoom] = useState(10);
   const [colorMode, setColorMode] = useState<ColorMode>("angle");
@@ -15,8 +25,8 @@ const Wachstum = () => {
 
   // Phyllotaxis: Golden angle (137.5°) in radians
   const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // ≈ 2.39996 rad ≈ 137.5°
-  const scaleFactor = 1; // Scale the radius
-  const count = 100; // Number of seeds
+  const scaleFactor = 0.75; // Scale the radius
+  const count = 1_000; // Number of seeds
 
   const updateZoom = (direction: number) => {
     setZoom(direction > 0 ? zoom - 1 : zoom + 1);
@@ -44,45 +54,35 @@ const Wachstum = () => {
     }
   };
 
+  const [seedData, setSeedData] = useState<SeedData[]>([]);
+
   useEffect(() => {
-    const newSeeds: JSX.Element[] = [];
+    const data: SeedData[] = [];
     for (let i = 0; i < count; i++) {
-      // Fibonacci-based radius: sqrt(n) gives nice spacing
       const radius = scaleFactor * Math.sqrt(i);
-
-      // Angle based on golden angle
       const angle = i * goldenAngle;
-
-      // Polar to Cartesian coordinates
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
-
-      // Size based on index (smaller seeds further out or vice versa)
       const size = 0.1 + (i / count) * 0.5;
-
-      const color = getColor(i, radius, angle);
-
-      newSeeds.push(
-        <mesh key={i} position={[x, y, 0]}>
-          <Seed size={size} color={color} />
-        </mesh>,
-      );
+      data.push({ x, y, radius, angle, size });
     }
+    setSeedData(data);
+  }, [scaleFactor, count]);
 
+  useEffect(() => {
+    const newSeeds = seedData.map((data, i) => (
+      <mesh key={i} position={[data.x, data.y, 0]}>
+        <Seed size={data.size} color={getColor(i, data.radius, data.angle)} />
+      </mesh>
+    ));
     setSeeds(newSeeds);
-  }, [colorMode]);
-
-  const modes: ColorMode[] = ["random", "angle", "radius", "spiral"];
+  }, [colorMode, seedData]);
 
   return (
     <div className="h-full flex">
       <div className="w-40 flex flex-col space-y-2 p-4">
-        <h2 className="font-bold">Phyllotaxis</h2>
-        <p className="text-sm">
-          Fibonacci-Spirale basierend auf dem Goldenen Winkel
-        </p>
         <div className="mt-4 space-y-2">
-          <p className="text-xs font-semibold">Färbung:</p>
+          <p className="text-xs font-semibold">Farbmodi:</p>
           {modes.map((mode) => (
             <button
               key={mode}
