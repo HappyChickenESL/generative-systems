@@ -1,11 +1,18 @@
 import { useRef, useEffect, useState } from "react";
 import { useThree } from "@react-three/fiber";
-import { Mesh, Vector2, Vector3, Texture, TextureLoader } from "three";
+import {
+  Mesh,
+  Vector2,
+  Vector3,
+  Texture,
+  TextureLoader,
+  SRGBColorSpace,
+} from "three";
 import { DragControls } from "three/addons/controls/DragControls.js";
 import { useTilesStore } from "../tiles.store";
 import { Tile } from "./Tile";
 
-const SNAP_DISTANCE = 1;
+const SNAP_DISTANCE = 2;
 
 export const TilesScene = () => {
   const { camera, gl } = useThree();
@@ -25,7 +32,10 @@ export const TilesScene = () => {
       return;
     }
     const loader = new TextureLoader();
-    loader.load(imageUrl, (tex) => setSharedTexture(tex));
+    loader.load(imageUrl, (tex) => {
+      tex.colorSpace = SRGBColorSpace;
+      setSharedTexture(tex);
+    });
   }, [imageUrl]);
 
   // BFS to find all tile ids connected to a given tile

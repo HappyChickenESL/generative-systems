@@ -96,7 +96,7 @@ const TilesCanvas = () => {
       camera={{ position: [0, 0, 30], fov: 75 }}
       style={{ width: "100%", height: "100%" }}
     >
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={1.5} />
       <TilesScene />
     </Canvas>
   );
