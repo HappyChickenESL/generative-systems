@@ -15,13 +15,17 @@ import { testRoute } from "./Test";
 import { unwahrscheinlichRoute } from "./pages/2_unwahrscheinlich/Unwahrscheinlich";
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
-import { shapesRoute } from "./pages/3_loops/Shapes";
+import { loopsRoute } from "./pages/3_loops/Loops";
 import { grammatikRoute } from "./pages/grammatik/Grammatik";
 import { interaktionRoute } from "./pages/5_interaktion/Interaktion";
 import { fokusRoute } from "./pages/4_fokus/Fokus";
 import { wachstumRoute } from "./pages/7_wachstum/Wachstum";
 import { unterbrechungRoute } from "./pages/8_unterbrechung/Unterbrechung";
 import { tilesRoute } from "./pages/9_tiles/Tiles";
+import { disconnectRoute } from "./pages/10_disconnect/Disconnect";
+import { klartextRoute } from "./pages/11_klartext/Klartext";
+import { verfolgtRoute } from "./pages/12_verfolgt/Verfolgt";
+import { spiegelbildRoute } from "./pages/13_spiegelbild/Verfolgt";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -40,9 +44,6 @@ export const rootRoute = createRootRoute({
           <Link to="/bodyProblem/3" className="[&.active]:font-bold">
             3 Body (WIP)
           </Link>
-          <Link to="/shapes" className="[&.active]:font-bold">
-            Shapes
-          </Link>
         </div>
         <div className="flex-1 m-2">
           <Outlet />
@@ -53,25 +54,43 @@ export const rootRoute = createRootRoute({
 });
 
 const homeRoute = createRoute({
-  component: () => <>Home</>,
+  component: () => (
+    <>
+      {pageRoutes.map((route, index) => (
+        <div key={index} className="m-4">
+          <Link to={route.path} className="[&.active]:font-bold">
+            {route.path}
+          </Link>
+        </div>
+      ))}
+    </>
+  ),
   getParentRoute: () => rootRoute,
   path: "/",
 });
 
-const routeTree = rootRoute.addChildren([
-  homeRoute,
+const pageRoutes = [
   farbfleckRoute,
   unwahrscheinlichRoute,
-  testRoute,
-  bodyProblemRoute,
-  threeBodyProblemRoute,
-  shapesRoute,
+  loopsRoute,
   fokusRoute,
-  grammatikRoute,
   interaktionRoute,
+  grammatikRoute,
   wachstumRoute,
   unterbrechungRoute,
   tilesRoute,
+  disconnectRoute,
+  klartextRoute,
+  verfolgtRoute,
+  spiegelbildRoute,
+];
+
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  testRoute,
+  bodyProblemRoute,
+  threeBodyProblemRoute,
+  ...pageRoutes,
 ]);
 
 const router = createRouter({ routeTree });

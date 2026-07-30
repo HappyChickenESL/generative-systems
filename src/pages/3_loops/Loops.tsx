@@ -5,7 +5,7 @@ import { OrthographicCamera } from "@react-three/drei";
 import { useMemo, useState, type JSX } from "react";
 import { ShapeMorph } from "./ShapeMorth";
 
-const Shapes = () => {
+const Loops = () => {
   const [scale, setScale] = useState(0.5);
 
   const [confirmedScale, setConfirmedScale] = useState(0.5);
@@ -122,8 +122,8 @@ const HookWrapper = ({
   return <mesh position={[topLeft.x, topLeft.y, 0]}>{...shapes}</mesh>;
 };
 
-export const shapesRoute = createRoute({
-  component: Shapes,
-  path: "/shapes",
+export const loopsRoute = createRoute({
+  component: Loops,
+  path: "/loops",
   getParentRoute: () => rootRoute,
 });

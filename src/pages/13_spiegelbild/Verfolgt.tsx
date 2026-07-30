@@ -1,12 +1,12 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 
-const Unwahrscheinlich = () => {
+const Spiegelbild = () => {
   return "";
 };
 
-export const unwahrscheinlichRoute = createRoute({
-  component: Unwahrscheinlich,
-  path: "/unwahrscheinlich",
+export const spiegelbildRoute = createRoute({
+  component: Spiegelbild,
+  path: "/spiegelbild",
   getParentRoute: () => rootRoute,
 });

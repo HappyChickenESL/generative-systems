@@ -1,12 +1,12 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 
-const Unwahrscheinlich = () => {
+const Verfolgt = () => {
   return "";
 };
 
-export const unwahrscheinlichRoute = createRoute({
-  component: Unwahrscheinlich,
-  path: "/unwahrscheinlich",
+export const verfolgtRoute = createRoute({
+  component: Verfolgt,
+  path: "/verfolgt",
   getParentRoute: () => rootRoute,
 });
