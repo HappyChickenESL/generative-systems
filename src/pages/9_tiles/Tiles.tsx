@@ -2,36 +2,82 @@ import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { useTilesStore } from "./tiles.store";
+import { useTilesStore, type TilesStore } from "./tiles.store";
 import { TilesScene } from "./components/TilesScene";
 import { Vector2 } from "three";
 
 const MIN_GRID = 2;
 const MAX_GRID = 12;
-const SCATTER = 20;
 
 const generateTiles = (
-  store: ReturnType<typeof useTilesStore>,
+  store: TilesStore,
   gridSize: number,
   withImage: boolean = false,
 ) => {
   Array.from(store.tiles.keys()).forEach((id) => store.removeTile(id));
-  const tileSize = Math.max(0.5, 40 / gridSize);
+  const tileSize = Math.max(0.5, 20 / gridSize);
+  const spacing = tileSize + 0.5; // spacing between tile centers
 
-  for (let i = 0; i < gridSize; i++) {
-    for (let j = 0; j < gridSize; j++) {
+  // Canvas bounds
+  const boundsX = 18;
+  const boundsY = 18;
+  const padding = 2;
+
+  // Create edge slots for positioning
+  const edges = [
+    { name: "top", positions: [] as Vector2[] },
+    { name: "bottom", positions: [] as Vector2[] },
+    { name: "right", positions: [] as Vector2[] },
+    { name: "left", positions: [] as Vector2[] },
+  ];
+
+  // Generate available positions along each edge
+  for (let i = 0; i < boundsX * 2; i += spacing) {
+    const offset = i - boundsX;
+    edges[0].positions.push(new Vector2(offset, boundsY + padding)); // top
+    edges[1].positions.push(new Vector2(offset, -boundsY - padding)); // bottom
+  }
+
+  for (let i = 0; i < boundsY * 2; i += spacing) {
+    const offset = i - boundsY;
+    edges[2].positions.push(new Vector2(boundsX + padding, offset)); // right
+    edges[3].positions.push(new Vector2(-boundsX - padding, offset)); // left
+  }
+
+  // Distribute tiles across edges
+  const totalTiles = gridSize * gridSize;
+  let tileIndex = 0;
+
+  for (let edgeIdx = 0; edgeIdx < 4; edgeIdx++) {
+    const edge = edges[edgeIdx];
+    const tilesPerEdge = Math.ceil(totalTiles / 4);
+    const availablePositions = [...edge.positions];
+
+    for (
+      let i = 0;
+      i < tilesPerEdge &&
+      tileIndex < totalTiles &&
+      availablePositions.length > 0;
+      i++
+    ) {
+      const posIdx = Math.floor(Math.random() * availablePositions.length);
+      const pos = availablePositions[posIdx];
+      availablePositions.splice(posIdx, 1);
+
+      const row = Math.floor(tileIndex / gridSize);
+      const col = tileIndex % gridSize;
+
       store.addTile({
-        id: `${i}-${j}`,
-        position: new Vector2(
-          (Math.random() - 0.5) * SCATTER,
-          (Math.random() - 0.5) * SCATTER,
-        ),
+        id: `${col}-${row}`,
+        position: pos,
         size: tileSize,
         color: withImage
           ? "white"
-          : `hsl(${((i + j) / ((gridSize - 1) * 2)) * 60}, 80%, 60%)`,
+          : `hsl(${((col + row) / ((gridSize - 1) * 2)) * 60}, 80%, 60%)`,
         merged: [],
       });
+
+      tileIndex++;
     }
   }
 };

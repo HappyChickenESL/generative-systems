@@ -39,9 +39,11 @@ export const Tile = ({
   // Sync mesh position from store
   useEffect(() => {
     if (meshRef.current) {
-      meshRef.current.position.set(tile.position.x, tile.position.y, 0);
+      // Z-depth based on merged count: fewer merges = closer to camera (higher z)
+      const z = -tile.merged.length * 0.1;
+      meshRef.current.position.set(tile.position.x, tile.position.y, z);
     }
-  }, [tile.position]);
+  }, [tile.position, tile.merged]);
 
   // Update material imperatively so Three.js recompiles the shader correctly
   useEffect(() => {

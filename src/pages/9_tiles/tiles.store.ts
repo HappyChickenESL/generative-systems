@@ -6,10 +6,10 @@ export interface Tile {
   position: Vector2;
   size: number;
   color: string;
-  merged: string[]; // ids of tiles that have merged into this one
+  merged: string[];
 }
 
-interface TilesStore {
+export interface TilesStore {
   tiles: Map<string, Tile>;
   selectedId: string | null;
   imageUrl: string | null;
@@ -33,7 +33,7 @@ interface TilesStore {
 export const useTilesStore = create<TilesStore>((set, get) => ({
   tiles: new Map(),
   selectedId: null,
-  imageUrl: null,
+  imageUrl: "/tiles/animal-1.png",
   gridSize: 4,
 
   setImageUrl: (url) => set({ imageUrl: url }),
@@ -89,26 +89,16 @@ export const useTilesStore = create<TilesStore>((set, get) => ({
       newPosition.x += xOffset;
       newPosition.y += yOffset;
 
-      console.log(source.position);
-      console.log(newPosition);
-      console.log(target.position);
-      console.log(xOffset);
-      console.log(yOffset);
-
       newMap.set(sourceId, {
         ...source,
         position: newPosition,
         merged: [targetId], // source is now part of target's group
       });
 
-      // state.updateTilePosition(sourceId, target.position);
-
       newMap.set(targetId, {
         ...target,
         merged: Array.from(targetConnections),
       });
-
-      // console.log(newMap);
 
       return { tiles: newMap };
     });
@@ -125,7 +115,7 @@ export const useTilesStore = create<TilesStore>((set, get) => ({
     const neighborIds = [
       `${col + 1}-${row}`, // right
       `${col - 1}-${row}`, // left
-      `${col}-${row + 1}`, // down (higher row = lower Y in Three.js)
+      `${col}-${row + 1}`, // down
       `${col}-${row - 1}`, // up
     ];
 

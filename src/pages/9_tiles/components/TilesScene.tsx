@@ -115,18 +115,17 @@ export const TilesScene = () => {
       if (!mesh) continue;
 
       const neighbors = store.getNeighbors(cid);
-      const [sc, sr] = cid.split("-").map(Number);
+      const [col, row] = cid.split("-").map(Number);
 
       for (const neighbor of neighbors) {
         // Skip tiles already in the same group
         if (connectedIds.includes(neighbor.id)) continue;
 
         const meshPos = new Vector2(mesh.position.x, mesh.position.y);
-        const [nc, nr] = neighbor.id.split("-").map(Number);
+        const [nCol, nRow] = neighbor.id.split("-").map(Number);
 
-        // World-space direction from cid toward neighbor (negate Y: grid row+ = world Y-)
-        const dirX = nc - sc;
-        const dirY = -(nr - sr);
+        const dirX = nCol - col;
+        const dirY = -(nRow - row);
 
         // Center of the facing edge on each tile
         const cidFace = new Vector2(
@@ -142,8 +141,8 @@ export const TilesScene = () => {
 
         if (faceDistance < SNAP_DISTANCE) {
           // Where `cid` needs to be to align perfectly with the neighbor
-          const snapX = neighbor.position.x + (sc - nc) * connectedTile.size;
-          const snapY = neighbor.position.y - (sr - nr) * connectedTile.size;
+          const snapX = neighbor.position.x + (col - nCol) * connectedTile.size;
+          const snapY = neighbor.position.y - (row - nRow) * connectedTile.size;
 
           // Translate the entire group by this delta
           const dx = snapX - mesh.position.x;
@@ -161,12 +160,11 @@ export const TilesScene = () => {
             }
           });
 
-          // Record the connection between the two touching tiles
           store.mergeTiles(
             cid,
             neighbor.id,
-            (sc - nc) * connectedTile.size,
-            -(sr - nr) * connectedTile.size,
+            (col - nCol) * connectedTile.size,
+            -(row - nRow) * connectedTile.size,
           );
           return;
         }
