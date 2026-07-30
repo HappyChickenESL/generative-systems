@@ -31,7 +31,7 @@ const TilesCanvas = () => {
               (Math.random() - 0.5) * 20,
               (Math.random() - 0.5) * 20,
             ),
-            size: 1,
+            size: 3,
             color: `hsl(${((i + j) / 14) * 240}, 80%, 60%)`,
             merged: [],
           });
