@@ -12,7 +12,6 @@ import {
 } from "@tanstack/react-router";
 import { farbfleckRoute } from "./pages/1_farbfleck/Farbfleck";
 import { testRoute } from "./Test";
-import { unwahrscheinlichRoute } from "./pages/2_unwahrscheinlich/Unwahrscheinlich";
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
 import { loopsRoute } from "./pages/3_loops/Loops";
@@ -26,6 +25,7 @@ import { disconnectRoute } from "./pages/10_disconnect/Disconnect";
 import { klartextRoute } from "./pages/11_klartext/Klartext";
 import { verfolgtRoute } from "./pages/12_verfolgt/Verfolgt";
 import { spiegelbildRoute } from "./pages/13_spiegelbild/Verfolgt";
+import { unwahrscheinlichRoute } from "./pages/2_unwahrscheinlich/Unwahrscheinlich";
 
 export const rootRoute = createRootRoute({
   component: () => (
