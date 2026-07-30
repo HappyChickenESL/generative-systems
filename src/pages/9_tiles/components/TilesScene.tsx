@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useThree } from "@react-three/fiber";
-import { Mesh, Vector2, Vector3 } from "three";
+import { Mesh, Vector2, Vector3, Texture, TextureLoader } from "three";
 import { DragControls } from "three/addons/controls/DragControls.js";
 import { useTilesStore } from "../tiles.store";
 import { Tile } from "./Tile";
@@ -13,8 +13,20 @@ export const TilesScene = () => {
   const meshRefs = useRef<Map<string, Mesh>>(new Map());
   const controlsRef = useRef<DragControls | null>(null);
   const lastDragPos = useRef<Vector3 | null>(null);
+  const [sharedTexture, setSharedTexture] = useState<Texture | null>(null);
 
   const tiles = Array.from(store.tiles.values());
+  const { imageUrl, gridSize } = store;
+
+  // Load image as a single shared texture when imageUrl changes
+  useEffect(() => {
+    if (!imageUrl) {
+      setSharedTexture(null);
+      return;
+    }
+    const loader = new TextureLoader();
+    loader.load(imageUrl, (tex) => setSharedTexture(tex));
+  }, [imageUrl]);
 
   // BFS to find all tile ids connected to a given tile
   const getConnectedIds = (id: string): string[] => {
@@ -168,6 +180,8 @@ export const TilesScene = () => {
         <Tile
           key={tile.id}
           tile={tile}
+          sharedTexture={sharedTexture}
+          gridSize={gridSize}
           onMount={(mesh) => {
             meshRefs.current.set(tile.id, mesh);
           }}

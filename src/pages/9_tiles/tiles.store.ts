@@ -12,6 +12,10 @@ export interface Tile {
 interface TilesStore {
   tiles: Map<string, Tile>;
   selectedId: string | null;
+  imageUrl: string | null;
+  gridSize: number;
+  setImageUrl: (url: string | null) => void;
+  setGridSize: (size: number) => void;
   addTile: (tile: Tile) => void;
   removeTile: (id: string) => void;
   updateTilePosition: (id: string, position: Vector2) => void;
@@ -29,6 +33,11 @@ interface TilesStore {
 export const useTilesStore = create<TilesStore>((set, get) => ({
   tiles: new Map(),
   selectedId: null,
+  imageUrl: null,
+  gridSize: 4,
+
+  setImageUrl: (url) => set({ imageUrl: url }),
+  setGridSize: (size) => set({ gridSize: size }),
 
   addTile: (tile) => {
     set((state) => {
