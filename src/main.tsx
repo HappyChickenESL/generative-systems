@@ -20,6 +20,8 @@ import { grammatikRoute } from "./pages/grammatik/Grammatik";
 import { interaktionRoute } from "./pages/5_interaktion/Interaktion";
 import { fokusRoute } from "./pages/4_fokus/Fokus";
 import { wachstumRoute } from "./pages/7_wachstum/Wachstum";
+import { unterbrechungRoute } from "./pages/8_unterbrechung/Unterbrechung";
+import { tilesRoute } from "./pages/9_tiles/Tiles";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -68,6 +70,8 @@ const routeTree = rootRoute.addChildren([
   grammatikRoute,
   interaktionRoute,
   wachstumRoute,
+  unterbrechungRoute,
+  tilesRoute,
 ]);
 
 const router = createRouter({ routeTree });
