@@ -6,30 +6,42 @@ import { useTilesStore } from "./tiles.store";
 import { TilesScene } from "./components/TilesScene";
 import { Vector2 } from "three";
 
-const GRID_SIZE = 5; // number of puzzle pieces per row/column (total = GRID_SIZE²)
-const TILE_SIZE = 3; // world-space size of each tile
-const SCATTER = 20; // how far tiles are scattered on init
+const MIN_GRID = 2;
+const MAX_GRID = 12;
+const SCATTER = 20;
+
+const generateTiles = (
+  store: ReturnType<typeof useTilesStore>,
+  gridSize: number,
+  withImage: boolean = false,
+) => {
+  Array.from(store.tiles.keys()).forEach((id) => store.removeTile(id));
+  const tileSize = Math.max(0.5, 40 / gridSize);
+
+  for (let i = 0; i < gridSize; i++) {
+    for (let j = 0; j < gridSize; j++) {
+      store.addTile({
+        id: `${i}-${j}`,
+        position: new Vector2(
+          (Math.random() - 0.5) * SCATTER,
+          (Math.random() - 0.5) * SCATTER,
+        ),
+        size: tileSize,
+        color: withImage
+          ? "white"
+          : `hsl(${((i + j) / ((gridSize - 1) * 2)) * 60}, 80%, 60%)`,
+        merged: [],
+      });
+    }
+  }
+};
 
 const TilesCanvas = () => {
   const store = useTilesStore();
 
-  // Initialize with some tiles
   useEffect(() => {
     if (store.tiles.size === 0) {
-      for (let i = 0; i < GRID_SIZE; i++) {
-        for (let j = 0; j < GRID_SIZE; j++) {
-          store.addTile({
-            id: `${i}-${j}`,
-            position: new Vector2(
-              (Math.random() - 0.5) * SCATTER,
-              (Math.random() - 0.5) * SCATTER,
-            ),
-            size: TILE_SIZE,
-            color: `hsl(${((i + j) / ((GRID_SIZE - 1) * 2)) * 60}, 80%, 60%)`,
-            merged: [],
-          });
-        }
-      }
+      generateTiles(store, store.gridSize);
     }
   }, [store]);
 
@@ -56,26 +68,8 @@ const Tiles = () => {
     const url = URL.createObjectURL(file);
     img.onload = () => {
       // Clear existing tiles
-      Array.from(store.tiles.keys()).forEach((id) => store.removeTile(id));
-
-      // Store the image URL so tiles can sample their region as a texture
       store.setImageUrl(url);
-      store.setGridSize(GRID_SIZE);
-
-      for (let i = 0; i < GRID_SIZE; i++) {
-        for (let j = 0; j < GRID_SIZE; j++) {
-          store.addTile({
-            id: `${i}-${j}`,
-            position: new Vector2(
-              (Math.random() - 0.5) * SCATTER,
-              (Math.random() - 0.5) * SCATTER,
-            ),
-            size: TILE_SIZE,
-            color: "white",
-            merged: [],
-          });
-        }
-      }
+      generateTiles(store, store.gridSize, true);
       // Note: do NOT revoke url — tiles need it for their textures
     };
     img.src = url;
@@ -88,6 +82,25 @@ const Tiles = () => {
         <div>
           <p className="text-slate-400 text-xs mb-1">Tiles</p>
           <p className="font-mono text-lg">{store.tiles.size}</p>
+        </div>
+
+        <div>
+          <p className="text-slate-400 text-xs mb-2">Grid size</p>
+          <div className="flex items-center gap-2">
+            <input
+              type="range"
+              min={MIN_GRID}
+              max={MAX_GRID}
+              value={store.gridSize}
+              onChange={(e) => {
+                const newSize = parseInt(e.target.value);
+                store.setGridSize(newSize);
+                generateTiles(store, newSize, !!store.imageUrl);
+              }}
+              className="flex-1"
+            />
+            <span className="text-sm font-mono w-8">{store.gridSize}</span>
+          </div>
         </div>
 
         <div>
