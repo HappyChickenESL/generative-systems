@@ -15,7 +15,7 @@ import { testRoute } from "./Test";
 import { bodyProblemRoute } from "./pages/drei/twoBodyProblem/AufgabeDrei";
 import { threeBodyProblemRoute } from "./pages/drei/threeBodyProblem/ThreeBodyProblem";
 import { loopsRoute } from "./pages/3_loops/Loops";
-import { grammatikRoute } from "./pages/grammatik/Grammatik";
+import { grammatikRoute } from "./pages/6_grammatik/Grammatik";
 import { interaktionRoute } from "./pages/5_interaktion/Interaktion";
 import { fokusRoute } from "./pages/4_fokus/Fokus";
 import { wachstumRoute } from "./pages/7_wachstum/Wachstum";

@@ -1,4 +1,4 @@
-import { minMaxRand } from "../../../shared/utils";
+// import { minMaxRand } from "../../../shared/utils";
 import { interpretLSystem } from "../Grammatik";
 
 type RuleSymbol = "A" | "F";
@@ -16,13 +16,13 @@ export function generateLSystem(iterations = 5) {
       return "F[+A]F[-A]FA";
     },
     F: () => {
-      const rand = minMaxRand(0, 1);
-      if (rand < 0.15) {
-        return "R";
-      }
-      if (rand < 0.3) {
-        return "L";
-      }
+      // const rand = minMaxRand(0, 1);
+      // if (rand < 0.15) {
+      //   return "R";
+      // }
+      // if (rand < 0.3) {
+      //   return "L";
+      // }
       return "FF";
     },
   };
