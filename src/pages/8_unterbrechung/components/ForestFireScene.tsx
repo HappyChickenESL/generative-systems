@@ -1,4 +1,4 @@
-import { Text } from "@react-three/drei";
+// import { Text } from "@react-three/drei";
 import type { ThreeEvent } from "@react-three/fiber";
 
 export type CellState = "tree" | "empty" | "burning" | "burned";
@@ -15,12 +15,12 @@ const CELL_COLORS: Record<CellState, string> = {
   burned: "#2e2e2e",
 };
 
-const CELL_EMOJIS: Record<CellState, string> = {
-  tree: "🌲",
-  empty: "",
-  burning: "🔥",
-  burned: "🪦",
-};
+// const CELL_EMOJIS: Record<CellState, string> = {
+//   tree: "🌲",
+//   empty: "",
+//   burning: "🔥",
+//   burned: "🪦",
+// };
 
 export const ForestFireScene = ({
   grid,
@@ -56,7 +56,7 @@ export const ForestFireScene = ({
           >
             <planeGeometry args={[0.92, 0.92]} />
             <meshBasicMaterial color={CELL_COLORS[cell.state]} />
-            {CELL_EMOJIS[cell.state] && (
+            {/* {CELL_EMOJIS[cell.state] && (
               <Text
                 position={[0, 0, 0.02]}
                 fontSize={0.9}
@@ -65,7 +65,7 @@ export const ForestFireScene = ({
               >
                 {CELL_EMOJIS[cell.state]}
               </Text>
-            )}
+            )} */}
           </mesh>
         )),
       )}
