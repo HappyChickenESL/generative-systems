@@ -15,17 +15,13 @@ type ForestSceneProps = {
 const Tree = ({ tree }: { tree: TreeData }) => {
   return (
     <group position={[tree.x, tree.y, tree.z]}>
-      <mesh position={[0, tree.trunkHeight * 0.5, 0]} castShadow receiveShadow>
+      <mesh position={[0, tree.trunkHeight * 0.5, 0]}>
         <cylinderGeometry
           args={[tree.trunkRadius, tree.trunkRadius * 1.1, tree.trunkHeight, 6]}
         />
         <meshStandardMaterial color="#5f3b1f" flatShading />
       </mesh>
-      <mesh
-        position={[0, tree.trunkHeight + tree.leafHeight * 0.5, 0]}
-        castShadow
-        receiveShadow
-      >
+      <mesh position={[0, tree.trunkHeight + tree.leafHeight * 0.5, 0]}>
         <coneGeometry args={[tree.leafRadius, tree.leafHeight, 7]} />
         <meshStandardMaterial color={tree.leafColor} flatShading />
       </mesh>

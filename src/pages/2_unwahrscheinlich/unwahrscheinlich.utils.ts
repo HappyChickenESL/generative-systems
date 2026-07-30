@@ -9,7 +9,6 @@ export type TreeData = {
   x: number;
   y: number;
   z: number;
-  radius: number;
   trunkHeight: number;
   trunkRadius: number;
   leafRadius: number;
@@ -18,10 +17,15 @@ export type TreeData = {
 };
 
 export type ForestData = {
-  seed: string;
   terrainSize: number;
   terrainSegments: number;
   trees: TreeData[];
+};
+
+type PlacementCircle = {
+  x: number;
+  z: number;
+  radius: number;
 };
 
 export const TERRAIN_SIZE = 90;
@@ -78,6 +82,7 @@ export const generateForestData = (
 
   const targetTrees = Math.floor(randRange(rng, 80, 151));
   const trees: TreeData[] = [];
+  const treePlacements: PlacementCircle[] = [];
 
   let attempts = 0;
   const maxTreeAttempts = targetTrees * 100;
@@ -93,7 +98,7 @@ export const generateForestData = (
     const x = randRange(rng, -usableHalfTerrain, usableHalfTerrain);
     const z = randRange(rng, -usableHalfTerrain, usableHalfTerrain);
 
-    if (!isFarEnough(trees, x, z, leafRadius, 1.25)) {
+    if (!isFarEnough(treePlacements, x, z, leafRadius, 1.25)) {
       continue;
     }
 
@@ -109,17 +114,21 @@ export const generateForestData = (
       x,
       y,
       z,
-      radius: leafRadius,
       trunkHeight,
       trunkRadius,
       leafRadius,
       leafHeight,
       leafColor,
     });
+
+    treePlacements.push({
+      x,
+      z,
+      radius: leafRadius,
+    });
   }
 
   return {
-    seed,
     terrainSize: TERRAIN_SIZE,
     terrainSegments: TERRAIN_SEGMENTS,
     trees,
