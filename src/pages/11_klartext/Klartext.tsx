@@ -11,7 +11,21 @@ const Klartext = () => {
       <div className="flex-1 border-4">
         <Canvas>
           <OrthographicCamera makeDefault zoom={90} position={[0, 0, 10]} />
-          <Word position={[-4.5, 0, 0]} text="KLARTEXT#"></Word>
+          <Word
+            obfuscationAmount={0.9}
+            position={[-4.5, 0, 0]}
+            text="ICH"
+          ></Word>
+          <Word
+            obfuscationAmount={0.4}
+            position={[1.5, 0, 0]}
+            text="WAR"
+          ></Word>
+          <Word
+            obfuscationAmount={0.3}
+            position={[-4.5, -3, 0]}
+            text="HIER"
+          ></Word>
         </Canvas>
       </div>
     </div>

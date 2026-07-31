@@ -1,11 +1,11 @@
 import { type ColorRepresentation } from "three";
 import { Segment } from "./Segment";
 import type { Point3, UppercaseLetter } from "../klartext.model";
-
-interface SegmentDefinition {
-  start: Point3;
-  end: Point3;
-}
+import {
+  obfuscateSegments,
+  type SegmentDefinition,
+  type ObfuscationOptions,
+} from "../klartext.obfuscation.ts";
 
 interface LetterProps {
   character: UppercaseLetter;
@@ -13,6 +13,7 @@ interface LetterProps {
   scale?: number;
   color?: ColorRepresentation;
   lineWidth?: number;
+  obfuscation?: ObfuscationOptions;
 }
 
 // 16-segment layout indices (according to wikipedia)
@@ -74,13 +75,23 @@ export const Letter = ({
   scale = 1,
   color,
   lineWidth,
+  obfuscation,
 }: LetterProps) => {
   const segments = LETTER_SEGMENTS[character];
+
+  let segmentLayout = SEGMENT_LAYOUT;
+
+  if (obfuscation) {
+    segmentLayout = obfuscateSegments(SEGMENT_LAYOUT, {
+      amount: obfuscation?.amount,
+      seed: `${obfuscation.seed}-${position}`,
+    });
+  }
 
   return (
     <group position={position} scale={scale}>
       {segments.map((segmentIndex) => {
-        const segment = SEGMENT_LAYOUT[segmentIndex];
+        const segment = segmentLayout[segmentIndex];
 
         return (
           <Segment

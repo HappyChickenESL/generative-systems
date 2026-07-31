@@ -5,6 +5,8 @@ import {
   type Point3,
   type UppercaseLetter,
 } from "../klartext.model";
+import type { ObfuscationOptions } from "../klartext.obfuscation.ts";
+import seedrandom from "seedrandom";
 
 interface WordProps {
   text: string;
@@ -13,6 +15,7 @@ interface WordProps {
   color?: ColorRepresentation;
   spacing?: number;
   lineWidth?: number;
+  obfuscationAmount?: number;
 }
 
 const SUPPORTED_LETTERS: Set<string> = new Set(UPPERCASE_LETTERS);
@@ -28,10 +31,18 @@ export const Word = ({
   position,
   scale = 1,
   color,
-  spacing = 1.25,
+  spacing = 1.5,
   lineWidth,
+  obfuscationAmount,
 }: WordProps) => {
   const characters = text.split("").filter(isWordCharacter);
+
+  const rng = seedrandom(Date.now().toString());
+
+  const obfuscation: ObfuscationOptions = {
+    amount: obfuscationAmount ?? 0,
+    seed: String(rng()),
+  };
 
   return (
     <group position={position}>
@@ -43,6 +54,7 @@ export const Word = ({
           scale={scale}
           color={color}
           lineWidth={lineWidth}
+          obfuscation={obfuscation}
         />
       ))}
     </group>
