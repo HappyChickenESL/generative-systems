@@ -1,16 +1,17 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 import { useCallback, useState } from "react";
-import { ImageDitherCanvas } from "./components/ImageDitherCanvas";
+import {
+  ImageDitherCanvas,
+  type SelectedPreviews,
+} from "./components/ImageDitherCanvas";
 import { loadImage } from "./spiegelbild.dithering";
 
 const Spiegelbild = () => {
-  const [sampleStep, setSampleStep] = useState(10);
-  const [regenerateSeed, setRegenerateSeed] = useState(0);
-  const [darkMinBrightness, setDarkMinBrightness] = useState(30);
-  const [darkMaxBrightness, setDarkMaxBrightness] = useState(100);
-  const [brightMinBrightness, setBrightMinBrightness] = useState(156);
-  const [brightMaxBrightness, setBrightMaxBrightness] = useState(226);
+  const [sampleStep, setSampleStep] = useState(20);
+  const [lowThreshold, setLowThreshold] = useState(96);
+  const [highThreshold, setHighThreshold] = useState(160);
+  const [finalThreshold, setFinalThreshold] = useState(128);
   const [darkPreviewSrc, setDarkPreviewSrc] = useState<string | null>(null);
   const [brightPreviewSrc, setBrightPreviewSrc] = useState<string | null>(null);
 
@@ -23,27 +24,18 @@ const Spiegelbild = () => {
       return;
     }
 
-    try {
-      const image = await loadImage(file);
-      setSourceImage(image);
-    } catch (error) {
-      setSourceImage(null);
-      setDarkPreviewSrc(null);
-      setBrightPreviewSrc(null);
-    }
+    const image = await loadImage(file);
+    setSourceImage(image);
   };
 
-  const onSelectedPreviewsChange = useCallback(
-    (previews: { dark: string | null; bright: string | null }) => {
-      setDarkPreviewSrc((previous) =>
-        previous === previews.dark ? previous : previews.dark,
-      );
-      setBrightPreviewSrc((previous) =>
-        previous === previews.bright ? previous : previews.bright,
-      );
-    },
-    [],
-  );
+  const onSelectedPreviewsChange = useCallback((previews: SelectedPreviews) => {
+    setDarkPreviewSrc((previous) =>
+      previous === previews.dark ? previous : previews.dark,
+    );
+    setBrightPreviewSrc((previous) =>
+      previous === previews.bright ? previous : previews.bright,
+    );
+  }, []);
 
   return (
     <div className="h-full flex">
@@ -51,7 +43,7 @@ const Spiegelbild = () => {
         <div className="flex flex-col space-y-2 text-xs">
           <div className="flex flex-col">
             <label htmlFor="sample-step-slider">
-              Sample step: {sampleStep}
+              pixels per image: {sampleStep}
             </label>
             <input
               id="sample-step-slider"
@@ -65,75 +57,54 @@ const Spiegelbild = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="dark-min-slider">
-              Dark min brightness: {darkMinBrightness}
+            <label htmlFor="low-threshold-slider">
+              Dithering threshold bright variant: {lowThreshold}
             </label>
             <input
-              id="dark-min-slider"
+              id="low-threshold-slider"
               type="range"
               min={0}
               max={255}
               step={1}
-              value={darkMinBrightness}
+              value={lowThreshold}
+              onChange={(event) => setLowThreshold(Number(event.target.value))}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="high-threshold-slider">
+              Dithering threshold dark variant: {highThreshold}
+            </label>
+            <input
+              id="high-threshold-slider"
+              type="range"
+              min={0}
+              max={255}
+              step={1}
+              value={highThreshold}
+              onChange={(event) => setHighThreshold(Number(event.target.value))}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="final-threshold-slider">
+              Dithering threshold final variant: {finalThreshold}
+            </label>
+            <input
+              id="final-threshold-slider"
+              type="range"
+              min={0}
+              max={255}
+              step={1}
+              value={finalThreshold}
               onChange={(event) =>
-                setDarkMinBrightness(Number(event.target.value))
+                setFinalThreshold(Number(event.target.value))
               }
             />
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="dark-max-slider">
-              Dark max brightness: {darkMaxBrightness}
-            </label>
-            <input
-              id="dark-max-slider"
-              type="range"
-              min={0}
-              max={255}
-              step={1}
-              value={darkMaxBrightness}
-              onChange={(event) =>
-                setDarkMaxBrightness(Number(event.target.value))
-              }
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="bright-min-slider">
-              Bright min brightness: {brightMinBrightness}
-            </label>
-            <input
-              id="bright-min-slider"
-              type="range"
-              min={0}
-              max={255}
-              step={1}
-              value={brightMinBrightness}
-              onChange={(event) =>
-                setBrightMinBrightness(Number(event.target.value))
-              }
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="bright-max-slider">
-              Bright max brightness: {brightMaxBrightness}
-            </label>
-            <input
-              id="bright-max-slider"
-              type="range"
-              min={0}
-              max={255}
-              step={1}
-              value={brightMaxBrightness}
-              onChange={(event) =>
-                setBrightMaxBrightness(Number(event.target.value))
-              }
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="image-upload">Upload image (PNG, JPG, JPEG)</label>
+            <label htmlFor="image-upload">Upload image</label>
             <input
               id="image-upload"
               type="file"
@@ -144,27 +115,24 @@ const Spiegelbild = () => {
 
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col space-y-1">
-              <span>Dark selection</span>
+              <span>Dark Image Preview</span>
               {darkPreviewSrc ? (
-                <img src={darkPreviewSrc} alt="Dark selection preview" />
+                <img
+                  src={darkPreviewSrc}
+                  alt="High-threshold variant preview"
+                />
               ) : null}
             </div>
 
             <div className="flex flex-col space-y-1">
-              <span>Bright selection</span>
+              <span>Bright Image Preview</span>
               {brightPreviewSrc ? (
-                <img src={brightPreviewSrc} alt="Bright selection preview" />
+                <img
+                  src={brightPreviewSrc}
+                  alt="Low-threshold variant preview"
+                />
               ) : null}
             </div>
-          </div>
-
-          <div>
-            <button
-              type="button"
-              onClick={() => setRegenerateSeed((previous) => previous + 1)}
-            >
-              Regenerate candidates
-            </button>
           </div>
         </div>
       </div>
@@ -173,11 +141,9 @@ const Spiegelbild = () => {
         <ImageDitherCanvas
           image={sourceImage}
           sampleStep={sampleStep}
-          regenerateSeed={regenerateSeed}
-          darkMinBrightness={darkMinBrightness}
-          darkMaxBrightness={darkMaxBrightness}
-          brightMinBrightness={brightMinBrightness}
-          brightMaxBrightness={brightMaxBrightness}
+          lowThreshold={lowThreshold}
+          highThreshold={highThreshold}
+          finalThreshold={finalThreshold}
           onSelectedPreviewsChange={onSelectedPreviewsChange}
         />
       </div>
