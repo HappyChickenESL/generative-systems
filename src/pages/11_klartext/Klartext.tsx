@@ -2,7 +2,7 @@ import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 import { Canvas } from "@react-three/fiber";
 import { OrthographicCamera } from "@react-three/drei";
-import { Letter } from "./components/Letter";
+import { Word } from "./components/Word";
 
 const Klartext = () => {
   return (
@@ -11,14 +11,7 @@ const Klartext = () => {
       <div className="flex-1 border-4">
         <Canvas>
           <OrthographicCamera makeDefault zoom={90} position={[0, 0, 10]} />
-          <Letter character="T" position={[-4.5, 0, 0]} />
-          <Letter character="E" position={[-3, 0, 0]} />
-          <Letter character="S" position={[-1.5, 0, 0]} />
-          <Letter character="T" position={[0, 0, 0]} />
-          <Letter character="R" position={[1.5, 0, 0]} />
-          <Letter character="Q" position={[3, 0, 0]} />
-          <Letter character="K" position={[4.5, 0, 0]} />
-          <Letter character="#" position={[6, 0, 0]} />
+          <Word position={[-4.5, 0, 0]} text="KLARTEXT#"></Word>
         </Canvas>
       </div>
     </div>
