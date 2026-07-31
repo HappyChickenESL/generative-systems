@@ -6,6 +6,7 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  createHashHistory,
   Link,
   Outlet,
   RouterProvider,
@@ -220,8 +221,9 @@ const pageRoutes = [
 ];
 
 const routeTree = rootRoute.addChildren([homeRoute, ...pageRoutes]);
+const history = createHashHistory();
 
-const router = createRouter({ routeTree });
+const router = createRouter({ routeTree, history });
 
 declare module "@tanstack/react-router" {
   interface Register {
