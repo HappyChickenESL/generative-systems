@@ -7,8 +7,7 @@ export type SelectedPreviews = {
 
 type ImageDitherCanvasProps = {
   sampleStep: number;
-  lowThreshold: number;
-  highThreshold: number;
+  brightThreshold: number;
   finalThreshold: number;
   rotationEnabled: boolean;
   image: HTMLImageElement | null;
@@ -17,8 +16,7 @@ type ImageDitherCanvasProps = {
 
 export const ImageDitherCanvas = ({
   sampleStep,
-  lowThreshold,
-  highThreshold,
+  brightThreshold,
   finalThreshold,
   rotationEnabled,
   image,
@@ -121,12 +119,46 @@ export const ImageDitherCanvas = ({
       };
     };
 
-    const highVariant = thresholdImageToDataUrl(highThreshold);
-    const lowVariant = thresholdImageToDataUrl(lowThreshold);
+    const brightVariant = thresholdImageToDataUrl(brightThreshold);
+
+    const darkVariantCanvas = document.createElement("canvas");
+    darkVariantCanvas.width = previewWidth;
+    darkVariantCanvas.height = previewHeight;
+
+    const darkVariantContext = darkVariantCanvas.getContext("2d")!;
+
+    darkVariantContext.drawImage(brightVariant.canvas, 0, 0);
+    const darkVariantImageData = darkVariantContext.getImageData(
+      0,
+      0,
+      previewWidth,
+      previewHeight,
+    );
+
+    for (
+      let pixelOffset = 0;
+      pixelOffset < darkVariantImageData.data.length;
+      pixelOffset += 4
+    ) {
+      darkVariantImageData.data[pixelOffset] =
+        255 - darkVariantImageData.data[pixelOffset];
+      darkVariantImageData.data[pixelOffset + 1] =
+        255 - darkVariantImageData.data[pixelOffset + 1];
+      darkVariantImageData.data[pixelOffset + 2] =
+        255 - darkVariantImageData.data[pixelOffset + 2];
+      darkVariantImageData.data[pixelOffset + 3] = 255;
+    }
+
+    darkVariantContext.putImageData(darkVariantImageData, 0, 0);
+
+    const darkVariant = {
+      canvas: darkVariantCanvas,
+      dataUrl: darkVariantCanvas.toDataURL(),
+    };
 
     onSelectedPreviewsChange?.({
-      dark: highVariant!.dataUrl,
-      bright: lowVariant!.dataUrl,
+      dark: darkVariant!.dataUrl,
+      bright: brightVariant!.dataUrl,
     });
 
     canvas.width = image.naturalWidth;
@@ -150,7 +182,9 @@ export const ImageDitherCanvas = ({
         const grayscale = 0.299 * red + 0.587 * green + 0.114 * blue;
 
         const variantCanvas =
-          grayscale >= baseThreshold ? lowVariant.canvas : highVariant.canvas;
+          grayscale >= baseThreshold
+            ? brightVariant.canvas
+            : darkVariant.canvas;
 
         const rotation = rotationEnabled
           ? (Math.random() * 2 - 1) * maxRotationRadians
@@ -166,17 +200,13 @@ export const ImageDitherCanvas = ({
   }, [
     image,
     sampleStep,
-    lowThreshold,
-    highThreshold,
+    brightThreshold,
     finalThreshold,
     rotationEnabled,
     onSelectedPreviewsChange,
   ]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="block w-auto h-auto max-w-none max-h-[85vh]"
-    />
+    <canvas ref={canvasRef} className="block w-full h-[85vh] object-contain" />
   );
 };

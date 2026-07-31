@@ -1,6 +1,6 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ImageDitherCanvas,
   type SelectedPreviews,
@@ -8,15 +8,21 @@ import {
 import { loadImage } from "./spiegelbild.dithering";
 
 const Spiegelbild = () => {
-  const [sampleStep, setSampleStep] = useState(20);
-  const [lowThreshold, setLowThreshold] = useState(96);
-  const [highThreshold, setHighThreshold] = useState(160);
+  const [sampleStep, setSampleStep] = useState(6);
+  const [brightThreshold, setBrightThreshold] = useState(150);
   const [finalThreshold, setFinalThreshold] = useState(128);
   const [rotationEnabled, setRotationEnabled] = useState(true);
   const [darkPreviewSrc, setDarkPreviewSrc] = useState<string | null>(null);
   const [brightPreviewSrc, setBrightPreviewSrc] = useState<string | null>(null);
 
   const [sourceImage, setSourceImage] = useState<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    const image = new Image();
+
+    image.onload = () => setSourceImage(image);
+    image.src = "/dithering/image.png";
+  }, []);
 
   const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -50,7 +56,7 @@ const Spiegelbild = () => {
               id="sample-step-slider"
               type="range"
               min={4}
-              max={32}
+              max={40}
               step={1}
               value={sampleStep}
               onChange={(event) => setSampleStep(Number(event.target.value))}
@@ -58,38 +64,25 @@ const Spiegelbild = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="low-threshold-slider">
-              Dithering threshold bright variant: {lowThreshold}
+            <label htmlFor="bright-threshold-slider">
+              First image dithering threshold: {brightThreshold}
             </label>
             <input
-              id="low-threshold-slider"
+              id="bright-threshold-slider"
               type="range"
               min={0}
               max={255}
               step={1}
-              value={lowThreshold}
-              onChange={(event) => setLowThreshold(Number(event.target.value))}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="high-threshold-slider">
-              Dithering threshold dark variant: {highThreshold}
-            </label>
-            <input
-              id="high-threshold-slider"
-              type="range"
-              min={0}
-              max={255}
-              step={1}
-              value={highThreshold}
-              onChange={(event) => setHighThreshold(Number(event.target.value))}
+              value={brightThreshold}
+              onChange={(event) =>
+                setBrightThreshold(Number(event.target.value))
+              }
             />
           </div>
 
           <div className="flex flex-col">
             <label htmlFor="final-threshold-slider">
-              Dithering threshold final variant: {finalThreshold}
+              Final dithering threshold: {finalThreshold}
             </label>
             <input
               id="final-threshold-slider"
@@ -115,36 +108,37 @@ const Spiegelbild = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="image-upload">Upload image</label>
+            <label htmlFor="image-select">Select image</label>
             <input
-              id="image-upload"
+              id="image-select"
               type="file"
               accept=".png,.jpg,.jpeg"
               onChange={onFileChange}
             />
           </div>
+          {darkPreviewSrc && brightPreviewSrc && (
+            <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-1">
+                <span>Bright Image Preview</span>
+                {brightPreviewSrc ? (
+                  <img
+                    src={brightPreviewSrc}
+                    alt="Low-threshold variant preview"
+                  />
+                ) : null}
+              </div>
 
-          <div className="flex flex-col space-y-2">
-            <div className="flex flex-col space-y-1">
-              <span>Dark Image Preview</span>
-              {darkPreviewSrc ? (
-                <img
-                  src={darkPreviewSrc}
-                  alt="High-threshold variant preview"
-                />
-              ) : null}
+              <div className="flex flex-col space-y-1">
+                <span>Dark Image Preview</span>
+                {darkPreviewSrc ? (
+                  <img
+                    src={darkPreviewSrc}
+                    alt="High-threshold variant preview"
+                  />
+                ) : null}
+              </div>
             </div>
-
-            <div className="flex flex-col space-y-1">
-              <span>Bright Image Preview</span>
-              {brightPreviewSrc ? (
-                <img
-                  src={brightPreviewSrc}
-                  alt="Low-threshold variant preview"
-                />
-              ) : null}
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -152,8 +146,7 @@ const Spiegelbild = () => {
         <ImageDitherCanvas
           image={sourceImage}
           sampleStep={sampleStep}
-          lowThreshold={lowThreshold}
-          highThreshold={highThreshold}
+          brightThreshold={brightThreshold}
           finalThreshold={finalThreshold}
           rotationEnabled={rotationEnabled}
           onSelectedPreviewsChange={onSelectedPreviewsChange}
