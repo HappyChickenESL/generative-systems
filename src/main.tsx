@@ -88,7 +88,7 @@ const VerfolgtPage = lazyComponentFromRouteExport(
   "verfolgtRoute",
 );
 const SpiegelbildPage = lazyComponentFromRouteExport(
-  () => import("./pages/13_spiegelbild/Verfolgt"),
+  () => import("./pages/13_spiegelbild/Spiegelbild"),
   "spiegelbildRoute",
 );
 
