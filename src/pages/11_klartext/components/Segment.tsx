@@ -1,9 +1,10 @@
 import { Line } from "@react-three/drei";
-import { Vector3, type ColorRepresentation } from "three";
+import { type ColorRepresentation } from "three";
+import type { Point3 } from "../klartext.model";
 
-export interface SegmentProps {
-  start: Vector3;
-  end: Vector3;
+interface SegmentProps {
+  start: Point3;
+  end: Point3;
   color?: ColorRepresentation;
   lineWidth?: number;
 }
@@ -11,8 +12,8 @@ export interface SegmentProps {
 export const Segment = ({
   start,
   end,
-  color = "#000000",
-  lineWidth = 1,
+  color = "#ffffff",
+  lineWidth = 5,
 }: SegmentProps) => {
   return (
     <Line points={[start, end]} color={color} linewidth={lineWidth}></Line>
