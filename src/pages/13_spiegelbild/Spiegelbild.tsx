@@ -12,6 +12,7 @@ const Spiegelbild = () => {
   const [lowThreshold, setLowThreshold] = useState(96);
   const [highThreshold, setHighThreshold] = useState(160);
   const [finalThreshold, setFinalThreshold] = useState(128);
+  const [rotationEnabled, setRotationEnabled] = useState(true);
   const [darkPreviewSrc, setDarkPreviewSrc] = useState<string | null>(null);
   const [brightPreviewSrc, setBrightPreviewSrc] = useState<string | null>(null);
 
@@ -103,6 +104,16 @@ const Spiegelbild = () => {
             />
           </div>
 
+          <div className="flex gap-2">
+            <input
+              id="rotation-toggle"
+              type="checkbox"
+              checked={rotationEnabled}
+              onChange={(event) => setRotationEnabled(event.target.checked)}
+            />
+            <label htmlFor="rotation-toggle">Enable rotation</label>
+          </div>
+
           <div className="flex flex-col">
             <label htmlFor="image-upload">Upload image</label>
             <input
@@ -144,6 +155,7 @@ const Spiegelbild = () => {
           lowThreshold={lowThreshold}
           highThreshold={highThreshold}
           finalThreshold={finalThreshold}
+          rotationEnabled={rotationEnabled}
           onSelectedPreviewsChange={onSelectedPreviewsChange}
         />
       </div>

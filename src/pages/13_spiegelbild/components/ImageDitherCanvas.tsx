@@ -10,6 +10,7 @@ type ImageDitherCanvasProps = {
   lowThreshold: number;
   highThreshold: number;
   finalThreshold: number;
+  rotationEnabled: boolean;
   image: HTMLImageElement | null;
   onSelectedPreviewsChange?: (previews: SelectedPreviews) => void;
 };
@@ -19,6 +20,7 @@ export const ImageDitherCanvas = ({
   lowThreshold,
   highThreshold,
   finalThreshold,
+  rotationEnabled,
   image,
   onSelectedPreviewsChange,
 }: ImageDitherCanvasProps) => {
@@ -136,6 +138,9 @@ export const ImageDitherCanvas = ({
     const step = Math.max(1, Math.floor(sampleStep));
     const baseThreshold = Math.max(0, Math.min(255, finalThreshold));
 
+    // max rotation, can be changed
+    const maxRotationRadians = (180 * Math.PI) / 180;
+
     for (let y = 0; y < sourceCanvas.height; y += step) {
       for (let x = 0; x < sourceCanvas.width; x += step) {
         const pixelOffset = (y * sourceCanvas.width + x) * 4;
@@ -147,7 +152,15 @@ export const ImageDitherCanvas = ({
         const variantCanvas =
           grayscale >= baseThreshold ? lowVariant.canvas : highVariant.canvas;
 
-        context.drawImage(variantCanvas, x, y, step, step);
+        const rotation = rotationEnabled
+          ? (Math.random() * 2 - 1) * maxRotationRadians
+          : 0;
+
+        context.save();
+        context.translate(x + step / 2, y + step / 2);
+        context.rotate(rotation);
+        context.drawImage(variantCanvas, -step / 2, -step / 2, step, step);
+        context.restore();
       }
     }
   }, [
@@ -156,6 +169,7 @@ export const ImageDitherCanvas = ({
     lowThreshold,
     highThreshold,
     finalThreshold,
+    rotationEnabled,
     onSelectedPreviewsChange,
   ]);
 
