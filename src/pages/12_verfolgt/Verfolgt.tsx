@@ -11,7 +11,6 @@ const distance = (a: { x: number; y: number }, b: { x: number; y: number }) => {
 };
 
 const PINCH_START = 20;
-const PINCH_END = 50;
 
 const Verfolgt = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -24,9 +23,6 @@ const Verfolgt = () => {
   const setLeftHand = useHandStore((s) => s.setLeftHand);
   const setRightHand = useHandStore((s) => s.setRightHand);
   const clearHands = useHandStore((s) => s.clearHands);
-
-  // const leftHand = useHandStore().leftHand;
-  // const rightHand = useHandStore().rightHand;
 
   const rightPinchRef = useRef(false);
   const leftPinchRef = useRef(false);
@@ -110,16 +106,24 @@ const Verfolgt = () => {
   };
 
   return (
-    <div className="relative">
-      <video
-        width={640}
-        height={480}
-        ref={videoRef}
-        autoPlay
-        playsInline
-        muted
-      />
-      <HandGrid shaderIndex={shaderIndex} />
+    <div className="h-full flex">
+      <div className="w-40 flex flex-col space-y-2">
+        use pointer and thumb fingers to create a grid. pinch fingers to switch
+        between shaders
+      </div>
+      <div className="flex-1 border-4">
+        <div className="relative">
+          <video
+            width={640}
+            height={480}
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+          />
+          <HandGrid shaderIndex={shaderIndex} />
+        </div>
+      </div>
     </div>
   );
 };
