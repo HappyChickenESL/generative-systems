@@ -104,10 +104,26 @@ const Disconnect = () => {
   }, []);
 
   function shootArrow(e: React.MouseEvent) {
-    console.log(e);
-    const x = dragStart.current.x;
-    const y = dragStart.current.y;
-    createArrow(engine, cloth, x, y, bowRef.current.angle, 1);
+    if (!sceneRef.current) return;
+
+    const rect = sceneRef.current.getBoundingClientRect();
+
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+
+    const startX = dragStart.current.x;
+    const startY = dragStart.current.y;
+
+    const dx = currentX - startX;
+    const dy = currentY - startY;
+
+    const pullDistance = Math.hypot(dx, dy);
+
+    const power = Math.min(30, pullDistance / 10);
+
+    console.log("Power:", power);
+
+    createArrow(engine, cloth, startX, startY, bowRef.current.angle, power);
   }
 
   const isDragging = useRef(false);

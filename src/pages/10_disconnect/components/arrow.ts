@@ -23,8 +23,8 @@ export const createArrow = (
   });
 
   Matter.Body.setVelocity(body, {
-    x: Math.cos(angle) * power * 20,
-    y: -Math.sin(angle) * power * -20,
+    x: Math.cos(angle) * power,
+    y: Math.sin(angle) * power,
   });
 
   Matter.Composite.add(engine.world, body);
