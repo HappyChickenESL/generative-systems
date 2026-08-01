@@ -25,6 +25,7 @@
     "ml5": "^1.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-markdown": "^10.1.0",
     "seedrandom": "^3.0.5",
     "simplex-noise": "^4.0.3",
     "tailwindcss": "^4.2.2",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@tailwindcss/typography": "^0.5.20",
     "@tanstack/router-plugin": "^1.167.22",
     "@types/culori": "^4.0.1",
     "@types/node": "^24.12.2",

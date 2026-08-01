@@ -10,8 +10,12 @@ import {
   Link,
   Outlet,
   RouterProvider,
+  useLocation,
 } from "@tanstack/react-router";
 import { Card } from "./shared/components/Card";
+import { Documentation } from "./documentation/Documentation.tsx";
+import { useModalStore } from "./documentation/documentation.store.ts";
+import { Button } from "./shared/components/Button.tsx";
 
 type RouteWithComponent = {
   options?: {
@@ -96,6 +100,9 @@ const SpiegelbildPage = lazyComponentFromRouteExport(
 
 export const rootRoute = createRootRoute({
   component: () => {
+    const setVisible = useModalStore((state) => state.setVisible);
+    const location = useLocation();
+
     return (
       <>
         <div className="flex flex-col h-full">
@@ -103,11 +110,19 @@ export const rootRoute = createRootRoute({
             <Link to="/" className="[&.active]:font-bold text-3xl">
               Start
             </Link>
+            {location.pathname !== "/" && (
+              <div className="m-auto">
+                <Button onClick={() => setVisible(true)}>
+                  open documentation
+                </Button>
+              </div>
+            )}
           </div>
           <div className="flex-1 m-2">
             <Outlet />
           </div>
         </div>
+        <Documentation></Documentation>
       </>
     );
   },
