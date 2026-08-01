@@ -5,6 +5,7 @@ import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 import { useEffect, useState, type JSX } from "react";
 import { random } from "culori";
+import { Button } from "../../shared/components/Button";
 
 type ColorMode = "random" | "angle" | "radius" | "spiral";
 
@@ -80,28 +81,26 @@ const Wachstum = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2 p-4">
-        <div className="mt-4 space-y-2">
-          <p className="text-xs font-semibold">Farbmodi:</p>
-          {modes.map((mode) => (
-            <button
-              key={mode}
-              onClick={() => setColorMode(mode)}
-              className={`w-full px-2 py-1 text-xs rounded ${
-                colorMode === mode
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-              }`}
-            >
-              {mode === "random" && "Random"}
-              {mode === "angle" && "Winkel"}
-              {mode === "radius" && "Radius"}
-              {mode === "spiral" && "Spiralen"}
-            </button>
-          ))}
-        </div>
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <div>Select color variant</div>
+        {modes.map((mode) => (
+          <Button
+            key={mode}
+            onClick={() => setColorMode(mode)}
+            className={`${
+              colorMode === mode
+                ? "bg-black! border-white border text-white font-bold"
+                : ""
+            }`}
+          >
+            {mode === "random" && "Random"}
+            {mode === "angle" && "Winkel"}
+            {mode === "radius" && "Radius"}
+            {mode === "spiral" && "Spiralen"}
+          </Button>
+        ))}
       </div>
-      <div className="flex-1 border-4">
+      <div className="flex-1 border-4 rounded-xl p-1">
         <Canvas onWheel={(e) => updateZoom(e.deltaY)}>
           <OrthographicCamera makeDefault zoom={zoom} position={[0, 0, 10]} />
           {...seeds}

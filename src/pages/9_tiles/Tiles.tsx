@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 import { useTilesStore, type TilesStore } from "./tiles.store";
 import { TilesScene } from "./components/TilesScene";
 import { Vector2 } from "three";
+import { Input } from "../../shared/components/Input";
+import { Button } from "../../shared/components/Button";
 
 const MIN_GRID = 2;
 const MAX_GRID = 12;
@@ -116,54 +118,66 @@ const Tiles = () => {
       // Clear existing tiles
       store.setImageUrl(url);
       generateTiles(store, store.gridSize, true);
-      // Note: do NOT revoke url — tiles need it for their textures
     };
     img.src = url;
   };
 
   return (
-    <div className="w-full h-full flex bg-slate-900">
-      {/* Sidebar */}
-      <div className="w-48 flex flex-col gap-4 p-4 bg-slate-800 border-r border-slate-700 text-white text-sm">
+    <div className="h-full flex">
+      <div className="w-40 flex flex-col space-y-10 m-4">
         <div>
           <p className="text-slate-400 text-xs mb-1">Tiles</p>
           <p className="font-mono text-lg">{store.tiles.size}</p>
         </div>
-
-        <div>
-          <p className="text-slate-400 text-xs mb-2">Grid size</p>
-          <div className="flex items-center gap-2">
-            <input
-              type="range"
-              min={MIN_GRID}
-              max={MAX_GRID}
-              value={store.gridSize}
-              onChange={(e) => {
-                const newSize = parseInt(e.target.value);
-                store.setGridSize(newSize);
-                generateTiles(store, newSize, !!store.imageUrl);
-              }}
-              className="flex-1"
-            />
-            <span className="text-sm font-mono w-8">{store.gridSize}</span>
-          </div>
+        <div className="flex">
+          <Input
+            label="Grid Size"
+            type="range"
+            min={MIN_GRID}
+            max={MAX_GRID}
+            value={store.gridSize}
+            onChange={(e) => {
+              const newSize = parseInt(e.target.value);
+              store.setGridSize(newSize);
+              generateTiles(store, newSize, !!store.imageUrl);
+            }}
+          ></Input>
+          <div className="text-sm font-mono w-8">{store.gridSize}</div>
         </div>
 
         <div>
-          <p className="text-slate-400 text-xs mb-2">Upload image</p>
-          <button
-            className="w-full bg-slate-700 hover:bg-slate-600 text-white text-xs py-2 px-3 rounded cursor-pointer"
-            onClick={() => fileInputRef.current?.click()}
-          >
+          <Button onClick={() => fileInputRef.current?.click()}>
             Choose file
-          </button>
-          <input
+          </Button>
+          <Input
+            label="Choose file"
             ref={fileInputRef}
             type="file"
             accept="image/*"
             className="hidden"
             onChange={handleFileUpload}
           />
+        </div>
+
+        {/* <Button type="button" onClick={generate}>
+            Regenerate
+          </Button> */}
+      </div>
+      <div className="flex-1 border-4 rounded-xl p-1">
+        <TilesCanvas />
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="w-full h-full flex bg-slate-900">
+      {/* Sidebar */}
+      <div className="w-48 flex flex-col gap-4 p-4 bg-slate-800 border-r border-slate-700 text-white text-sm">
+        <div></div>
+
+        <div>
+          <p className="text-slate-400 text-xs mb-2">Upload image</p>
+
           <p className="text-slate-500 text-xs mt-1">
             Each pixel becomes a tile
           </p>

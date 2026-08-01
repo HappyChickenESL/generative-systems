@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef } from "react";
 import { createCloth, destroyCloth, type Cloth } from "./components/cloth";
 import { createArrow } from "./components/arrow";
+import { Button } from "../../shared/components/Button";
 
 const Disconnect = () => {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -170,8 +171,9 @@ const Disconnect = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2">
-        <button
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <Button
+          type="button"
           onClick={() => {
             if (clothRef.current) {
               destroyCloth(engine, clothRef.current);
@@ -180,10 +182,13 @@ const Disconnect = () => {
             clothRef.current = createCloth(engine);
           }}
         >
-          Generate Cloth
-        </button>
+          Regenerate Cloth
+        </Button>
+        <div>
+          Click on the canvas and drag to shoot an arrow and destroy the cloth!
+        </div>
       </div>
-      <div className="flex-1 border-4">
+      <div className="flex-1 border-4 rounded-xl p-1">
         <div
           onMouseMove={handleMouseMove}
           onMouseDown={(e) => {

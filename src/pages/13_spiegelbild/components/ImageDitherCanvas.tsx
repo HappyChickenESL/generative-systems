@@ -207,6 +207,9 @@ export const ImageDitherCanvas = ({
   ]);
 
   return (
-    <canvas ref={canvasRef} className="block w-full h-[85vh] object-contain" />
+    <canvas
+      ref={canvasRef}
+      className="block w-full h-[85vh] object-contain m-auto"
+    />
   );
 };

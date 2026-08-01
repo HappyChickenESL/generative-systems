@@ -6,6 +6,7 @@ import { Word } from "./components/Word";
 import { useState } from "react";
 import { formatHex } from "culori";
 import { minMaxRand } from "../../shared/utils";
+import { Input } from "../../shared/components/Input";
 
 const randomColor = () =>
   formatHex({
@@ -36,45 +37,30 @@ const Klartext = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-60 flex flex-col space-y-6 p-2">
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="obfuscation-text">Text</label>
-          <input
-            id="obfuscation-text"
-            type="text"
-            value={obfuscationText}
-            onChange={(event) => setObfuscationText(event.target.value)}
-          />
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="obfuscation-slider">
-            Amount: {obfuscationAmount.toFixed(2)}
-          </label>
-          <input
-            id="obfuscation-slider"
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={obfuscationAmount}
-            onChange={(event) =>
-              setObfuscationAmount(Number(event.target.value))
-            }
-          />
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="color-picker">Color</label>
-          <input
-            id="color-picker"
-            type="color"
-            value={color}
-            onChange={(event) => setColor(event.target.value)}
-          />
-        </div>
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <Input
+          label="Obfuscation Text"
+          id="obfuscation-text"
+          type="text"
+          value={obfuscationText}
+          onChange={(event) => setObfuscationText(event.target.value)}
+        />
+        <Input
+          label="Obfuscation Level"
+          id="obfuscation-slider"
+          type="range"
+          className="range"
+          min={0}
+          max={1}
+          step={0.05}
+          value={obfuscationAmount}
+          onChange={(event) => setObfuscationAmount(Number(event.target.value))}
+        />
+        {/* <Button type="button" onClick={generate}>
+          Regenerate
+        </Button> */}
       </div>
-      <div className="flex-1 border-4">
+      <div className="flex-1 border-4 rounded-xl p-1">
         <Canvas>
           <OrthographicCamera makeDefault zoom={90} position={[0, 0, 10]} />
           {words.map((text, index) => {
@@ -96,6 +82,29 @@ const Klartext = () => {
           })}
         </Canvas>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="h-full flex">
+      <div className="w-60 flex flex-col space-y-6 p-2">
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="obfuscation-slider">
+            Amount: {obfuscationAmount.toFixed(2)}
+          </label>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="color-picker">Color</label>
+          <input
+            id="color-picker"
+            type="color"
+            value={color}
+            onChange={(event) => setColor(event.target.value)}
+          />
+        </div>
+      </div>
+      <div className="flex-1 border-4"></div>
     </div>
   );
 };

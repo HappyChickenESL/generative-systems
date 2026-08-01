@@ -3,48 +3,61 @@ import { Canvas } from "@react-three/fiber";
 import { GearShape, type GearShapeType } from "./components/GearShape";
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
-import type { JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { Vector3 } from "three";
 import { minMaxRand } from "../../shared/utils";
+import { Button } from "../../shared/components/Button";
 
 const Fokus = () => {
-  const shapes: JSX.Element[] = [];
-  const circles: GearShapeType[] = [];
+  const [shapes, setShapes] = useState<JSX.Element[]>([]);
 
-  for (let i = 0; i < 200; i++) {
-    const r = minMaxRand(0.1, 1);
-    let tH = minMaxRand(r * 0.1, r * 0.15);
+  const generate = () => {
+    const newShapes: JSX.Element[] = [];
+    const newCircles: GearShapeType[] = [];
+    for (let i = 0; i < 200; i++) {
+      const r = minMaxRand(0.1, 1);
+      let tH = minMaxRand(r * 0.1, r * 0.15);
 
-    let t = Math.floor(minMaxRand(8, 40));
+      let t = Math.floor(minMaxRand(8, 40));
 
-    let position;
-    let direction = true;
+      let position;
+      let direction = true;
 
-    if (circles.length === 0) {
-      position = new Vector3(0, 0, 0);
-    } else {
-      const possiblePos = getPossiblePositions(circles, r + tH);
-      position = possiblePos[5].pos;
-      direction = possiblePos[5].direction;
+      if (newCircles.length === 0) {
+        position = new Vector3(0, 0, 0);
+      } else {
+        const possiblePos = getPossiblePositions(newCircles, r + tH);
+        position = possiblePos[5].pos;
+        direction = possiblePos[5].direction;
+      }
+
+      const gearShape: GearShapeType = {
+        center: position,
+        radius: r,
+        teeth: t,
+        toothHeight: r * 0.1,
+        direction: direction,
+      };
+      newCircles.push(gearShape);
+      newShapes.push(
+        <mesh position={position}>
+          {<GearShape {...gearShape}></GearShape>}
+        </mesh>,
+      );
     }
+    setShapes(newShapes);
+  };
 
-    const gearShape: GearShapeType = {
-      center: position,
-      radius: r,
-      teeth: t,
-      toothHeight: r * 0.1,
-      direction: direction,
-    };
-    circles.push(gearShape);
-    shapes.push(
-      <mesh position={position}>{<GearShape {...gearShape}></GearShape>}</mesh>,
-    );
-  }
+  useEffect(generate, []);
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2"></div>
-      <div className="flex-1 border-4">
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <Button type="button" onClick={generate}>
+          Regenerate
+        </Button>
+      </div>
+      <div className="flex-1 border-4 rounded-xl p-1">
         <Canvas>
           <OrthographicCamera makeDefault zoom={120} position={[0, 0, 10]} />
           {...shapes}

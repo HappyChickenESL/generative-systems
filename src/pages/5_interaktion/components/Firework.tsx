@@ -22,7 +22,7 @@ const types: FireworkType[] = ["sphere", "ring", "spiral"];
 export const Firework = ({ x, y, onDone }: FireworkProps) => {
   const props = useMemo(() => {
     const type = types[Math.floor(Math.random() * 3)];
-    const count = Math.floor(minMaxRand(24, 72));
+    const count = Math.floor(minMaxRand(500, 1000));
     const lifetime = minMaxRand(1.5, 3.0);
     const speed = minMaxRand(0.4, 1.6);
     const gravity = minMaxRand(0.1, 0.5);

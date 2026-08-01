@@ -107,12 +107,14 @@ const Verfolgt = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2">
-        use pointer and thumb fingers to create a grid. pinch fingers to switch
-        between shaders
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <div>
+          use pointer and thumb fingers to create a grid. pinch fingers to
+          switch between shaders
+        </div>
       </div>
-      <div className="flex-1 border-4">
-        <div className="relative">
+      <div className="flex-1 flex border-4 rounded-xl p-1">
+        <div className="m-auto relative">
           <video
             width={640}
             height={480}

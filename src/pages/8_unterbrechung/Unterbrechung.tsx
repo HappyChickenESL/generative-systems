@@ -148,16 +148,16 @@ const Unterbrechung = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2">
-        <div className="text-xs space-y-1">
-          <p>Trees: {counts.tree}</p>
-          <p>Grass: {counts.empty}</p>
-          <p>Burning: {counts.burning}</p>
-          <p>Burned: {counts.burned}</p>
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <div>
+          <div>Trees: {counts.tree}</div>
+          <div>Grass: {counts.empty}</div>
+          <div>Burning: {counts.burning}</div>
+          <div>Burned: {counts.burned}</div>
         </div>
+        <div>Click on a green tile to spread fire!</div>
       </div>
-
-      <div className="flex-1 border-4">
+      <div className="flex-1 border-4 rounded-xl p-1">
         <Canvas>
           <OrthographicCamera makeDefault zoom={24} position={[0, 0, 20]} />
           <ForestFireScene grid={forest} onIgnite={igniteCell} />

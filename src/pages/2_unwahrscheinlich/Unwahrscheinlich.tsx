@@ -8,6 +8,7 @@ import {
   generateForestData,
   type ForestData,
 } from "./unwahrscheinlich.utils";
+import { Button } from "../../shared/components/Button";
 
 const createSeed = () => {
   const values = new Uint32Array(1);
@@ -34,16 +35,12 @@ const Unwahrscheinlich = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2 mx-2">
-        <button
-          type="button"
-          className="hover:font-bold cursor-pointer text-white border-white border rounded-sm p-1"
-          onClick={() => setSeed(createSeed())}
-        >
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <Button type="button" onClick={() => setSeed(createSeed())}>
           Regenerate
-        </button>
+        </Button>
       </div>
-      <div className="flex-1 border-4 rounded-sm">
+      <div className="flex-1 border-4 rounded-xl p-1">
         <Canvas
           camera={{ position: [34, 28, 34], fov: 50, near: 0.1, far: 300 }}
         >

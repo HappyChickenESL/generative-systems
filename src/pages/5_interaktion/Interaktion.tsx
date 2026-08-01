@@ -38,8 +38,10 @@ const Interaktion = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2 p-4"></div>
-      <div className="flex-1 border-4 bg-black">
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        Click on the canvas to shoot fireworks!
+      </div>
+      <div className="flex-1 border-4 rounded-xl p-1">
         <Canvas>
           <OrthographicCamera makeDefault zoom={120} position={[0, 0, 10]} />
           <ClickPlane onPointerDown={handleClick} />

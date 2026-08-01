@@ -1,4 +1,4 @@
-import { StrictMode, Suspense, lazy, type ComponentType } from "react";
+import { Suspense, lazy, type ComponentType } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import "./App.css";
@@ -11,6 +11,7 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
+import { Card } from "./shared/components/Card";
 
 type RouteWithComponent = {
   options?: {
@@ -85,7 +86,7 @@ const KlartextPage = lazyComponentFromRouteExport(
   "klartextRoute",
 );
 const VerfolgtPage = lazyComponentFromRouteExport(
-  () => import("./pages/12_verfolgt/Verfolgt"),
+  () => import("./pages/12_verfolgt/Verfolgt.tsx"),
   "verfolgtRoute",
 );
 const SpiegelbildPage = lazyComponentFromRouteExport(
@@ -94,33 +95,39 @@ const SpiegelbildPage = lazyComponentFromRouteExport(
 );
 
 export const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <div className="flex flex-col h-full">
-        <div className="p-2 flex gap-8 h-10">
-          <Link to="/" className="[&.active]:font-bold">
-            Home
-          </Link>
+  component: () => {
+    return (
+      <>
+        <div className="flex flex-col h-full">
+          <div className="p-2 flex gap-8 h-10">
+            <Link to="/" className="[&.active]:font-bold text-3xl">
+              Start
+            </Link>
+          </div>
+          <div className="flex-1 m-2">
+            <Outlet />
+          </div>
         </div>
-        <div className="flex-1 m-2">
-          <Outlet />
-        </div>
-      </div>
-    </>
-  ),
+      </>
+    );
+  },
 });
 
 const homeRoute = createRoute({
   component: () => (
-    <>
+    <div className="flex flex-wrap">
       {pageRoutes.map((route, index) => (
-        <div key={index} className="m-4">
+        <div key={index} className="m-4 h-100">
           <Link to={route.path} className="[&.active]:font-bold">
-            {route.path}
+            <Card
+              desc="test"
+              title={route.path}
+              img={`/cards/${route.path}.png`}
+            ></Card>
           </Link>
         </div>
       ))}
-    </>
+    </div>
   ),
   getParentRoute: () => rootRoute,
   path: "/",
