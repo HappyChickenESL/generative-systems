@@ -7,7 +7,7 @@ export const Input = (
   > & { label: string },
 ) => {
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 text-sm">
       <label>{props.label}</label>
       <input
         {...props}

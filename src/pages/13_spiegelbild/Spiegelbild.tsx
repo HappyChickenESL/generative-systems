@@ -49,7 +49,7 @@ const Spiegelbild = () => {
 
   return (
     <div className="h-full flex">
-      <div className="w-80 flex flex-col space-y-2 m-4">
+      <div className="w-60 flex flex-col space-y-2 m-4">
         <Input
           label={"Pixels Per Image: " + sampleStep}
           className="range"

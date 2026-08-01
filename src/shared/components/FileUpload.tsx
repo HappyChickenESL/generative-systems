@@ -6,5 +6,5 @@ export const FileUpload = (
     HTMLInputElement
   >,
 ) => {
-  return <input type="file" className="file-input" {...props} />;
+  return <input type="file" className="file-input text-sm h-7" {...props} />;
 };

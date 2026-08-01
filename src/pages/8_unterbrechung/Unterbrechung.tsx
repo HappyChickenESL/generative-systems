@@ -12,11 +12,11 @@ import {
 const ROWS = 30;
 const COLS = 40;
 const TREE_DENSITY = 0.1;
-const FIRE_SPREAD_CHANCE = 0.4;
+const FIRE_SPREAD_CHANCE = 0.5;
 const TREE_SPREAD_CHANCE = 0.04;
 const RECOVERY_CHANCE = 0.02;
 const BURN_DURATION = 2;
-const TICK_MS = 100;
+const TICK_MS = 50;
 
 const createForest = () =>
   Array.from({ length: ROWS }, () =>
@@ -98,7 +98,10 @@ const stepForest = (grid: Cell[][]) =>
       }
 
       if (cell.state === "burned") {
-        if (Math.random() < RECOVERY_CHANCE) {
+        if (
+          hasNeighborState(grid, rowIndex, colIndex, "tree") &&
+          Math.random() < RECOVERY_CHANCE
+        ) {
           return { state: "empty", burnTicksLeft: 0 } as Cell;
         }
 
