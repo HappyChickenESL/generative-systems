@@ -10,7 +10,7 @@ import {
   World,
 } from "matter-js";
 import { useEffect, useRef } from "react";
-import { createCloth } from "./components/cloth";
+import { createCloth, destroyCloth, type Cloth } from "./components/cloth";
 import { createArrow } from "./components/arrow";
 
 const Disconnect = () => {
@@ -19,7 +19,9 @@ const Disconnect = () => {
 
   const engine = engineRef.current;
 
-  const cloth = createCloth(engine);
+  const renderRef = useRef<Render | null>(null);
+
+  const clothRef = useRef<Cloth | null>(createCloth(engine));
 
   const bowRef = useRef({
     x: 0,
@@ -32,7 +34,6 @@ const Disconnect = () => {
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    // Renderer
     const render = Render.create({
       element: sceneRef.current,
       engine,
@@ -43,6 +44,8 @@ const Disconnect = () => {
         background: "#222",
       },
     });
+
+    renderRef.current = render;
 
     const ground = Bodies.rectangle(750, 750, 1500, 50, {
       isStatic: true,
@@ -121,9 +124,15 @@ const Disconnect = () => {
 
     const power = Math.min(30, pullDistance / 10);
 
-    console.log("Power:", power);
-
-    createArrow(engine, cloth, startX, startY, bowRef.current.angle, power);
+    createArrow(
+      engine,
+      renderRef.current!,
+      clothRef.current!,
+      startX,
+      startY,
+      bowRef.current.angle,
+      power,
+    );
   }
 
   const isDragging = useRef(false);
@@ -160,28 +169,43 @@ const Disconnect = () => {
   });
 
   return (
-    <div>
-      <div
-        onMouseMove={handleMouseMove}
-        onMouseDown={(e) => {
-          const rect = sceneRef.current!.getBoundingClientRect();
+    <div className="h-full flex">
+      <div className="w-40 flex flex-col space-y-2">
+        <button
+          onClick={() => {
+            if (clothRef.current) {
+              destroyCloth(engine, clothRef.current);
+            }
 
-          isDragging.current = true;
+            clothRef.current = createCloth(engine);
+          }}
+        >
+          Generate Cloth
+        </button>
+      </div>
+      <div className="flex-1 border-4">
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseDown={(e) => {
+            const rect = sceneRef.current!.getBoundingClientRect();
 
-          dragStart.current = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-          };
+            isDragging.current = true;
 
-          bowRef.current.x = dragStart.current.x;
-          bowRef.current.y = dragStart.current.y;
-        }}
-        onMouseUp={() => {
-          isDragging.current = false;
-        }}
-        onClick={shootArrow}
-        ref={sceneRef}
-      ></div>
+            dragStart.current = {
+              x: e.clientX - rect.left,
+              y: e.clientY - rect.top,
+            };
+
+            bowRef.current.x = dragStart.current.x;
+            bowRef.current.y = dragStart.current.y;
+          }}
+          onMouseUp={() => {
+            isDragging.current = false;
+          }}
+          onClick={shootArrow}
+          ref={sceneRef}
+        ></div>
+      </div>
     </div>
   );
 };
