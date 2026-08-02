@@ -1,11 +1,9 @@
-// import { minMaxRand } from "../../../shared/utils";
+import type { JSX } from "react";
 import { minMaxRand } from "../../../shared/utils";
-import { interpretLSystem } from "../Grammatik";
 
 type RuleSymbol = "A" | "F";
 
-export default function City() {
-  const segments = interpretLSystem(generateLSystem());
+export default function City({ segments }: { segments: JSX.Element[] }) {
   return <>{...segments}</>;
 }
 

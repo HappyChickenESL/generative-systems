@@ -1,21 +1,47 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "../../main";
 import { Canvas } from "@react-three/fiber";
-import City from "./components/City";
+import City, { generateLSystem } from "./components/City";
 import { OrbitControls } from "@react-three/drei";
 import { Vector3 } from "three";
-import type { JSX } from "react";
+import { useState, type JSX } from "react";
 import { Road } from "./components/Roads";
 import { Building } from "./components/Building";
+import { Button } from "../../shared/components/Button";
 
 const Grammatik = () => {
+  const [segments, setSegments] = useState<JSX.Element[]>(
+    interpretLSystem(generateLSystem()),
+  );
+
+  const generate = () => {
+    setSegments(interpretLSystem(generateLSystem()));
+  };
+
   return (
     <div className="h-full flex">
-      <div className="w-40 flex flex-col space-y-2"></div>
+      <div className="w-40 flex flex-col space-y-10 m-4">
+        <Button type="button" onClick={generate}>
+          Regenerate
+        </Button>
+      </div>
+      <div className="flex-1 border-4 rounded-xl p-1">
+        <Canvas camera={{ position: [30, 30, 30], fov: 50 }}>
+          <OrbitControls target={[0, 0, 0]} />
+          <City segments={segments}></City>
+          <ambientLight />
+        </Canvas>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="h-full flex">
+      <div className="w-40 flex flex-col space-y-2">hi</div>
       <div className="flex-1">
         <Canvas camera={{ position: [30, 30, 30], fov: 50 }}>
           <OrbitControls target={[0, 0, 0]} />
-          <City></City>
+          <City segments={segments}></City>
           <ambientLight />
         </Canvas>
       </div>

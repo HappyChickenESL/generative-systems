@@ -22,3 +22,9 @@ Jetzt der tatsächliche Ablauf
 - Dunkles Bild invertieren und als helles Bild benutzen
 - Jedes x-te Pixel entweder durch helles oder dunkles Bild tauschen
 - Bilder zufällig um bis zu 360° drehen
+
+## Fazit
+
+Allgemein bin ich auf das Projekt am meisten Stolz, insbesondere auch bei dem Schwan sieht man wie gut das funktioniert. Einerseits sieht das Ergebnis sehr cool aus aber man erkennt die einzelnen Schwäne auch in dem Bild wieder.
+
+Die Rotation hat auch nochmal einen riesen Unterschied gemacht, damit das Bild natürlicher wirkt. Insbesondere auch da es dadurch, dann oft Bereiche gibt, wo der tatsächliche Hintergrund noch zu sehen ist, da die rotierten Bilder nicht alles abdecken.
