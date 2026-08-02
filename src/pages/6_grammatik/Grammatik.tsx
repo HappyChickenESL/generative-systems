@@ -14,7 +14,7 @@ const Grammatik = () => {
       <div className="w-40 flex flex-col space-y-2"></div>
       <div className="flex-1">
         <Canvas camera={{ position: [30, 30, 30], fov: 50 }}>
-          <OrbitControls target={[50, 0, 0]} />
+          <OrbitControls target={[0, 0, 0]} />
           <City></City>
           <ambientLight />
         </Canvas>
