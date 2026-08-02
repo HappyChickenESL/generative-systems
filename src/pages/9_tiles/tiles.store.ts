@@ -33,7 +33,7 @@ export interface TilesStore {
 export const useTilesStore = create<TilesStore>((set, get) => ({
   tiles: new Map(),
   selectedId: null,
-  imageUrl: "/tiles/animal-1.png",
+  imageUrl: "/tiles/scene-1.jpg",
   gridSize: 4,
 
   setImageUrl: (url) => set({ imageUrl: url }),

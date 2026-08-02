@@ -10,7 +10,6 @@ import { noiseFragmentShader } from "./filters/noise";
 import { useWebcamStore } from "../webcam.store";
 import { colorShiftFragmentShader } from "./filters/color";
 import { testShader } from "./filters/test";
-import { superSimpleShader } from "./filters/video";
 
 const fragmentShaders = [
   defaultFragmentShader,
@@ -19,7 +18,6 @@ const fragmentShaders = [
   noiseFragmentShader,
   colorShiftFragmentShader,
   testShader,
-  superSimpleShader,
 ];
 
 function GridMesh({ shaderIndex }: { shaderIndex: number }) {

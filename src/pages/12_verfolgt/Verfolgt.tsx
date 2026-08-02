@@ -109,8 +109,9 @@ const Verfolgt = () => {
     <div className="h-full flex">
       <div className="w-40 flex flex-col space-y-10 m-4">
         <div>
-          use pointer and thumb fingers to create a grid. pinch fingers to
-          switch between shaders
+          Show your two hands in the camera. A grid is displayed between your
+          two thumbs and index fingers. pinch your index and thumb on one hand
+          to switch back/ forth between the shader variations. shaders
         </div>
       </div>
       <div className="flex-1 flex border-4 rounded-xl p-1">

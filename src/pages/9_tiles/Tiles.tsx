@@ -6,7 +6,6 @@ import { useTilesStore, type TilesStore } from "./tiles.store";
 import { TilesScene } from "./components/TilesScene";
 import { Vector2 } from "three";
 import { Input } from "../../shared/components/Input";
-import { Button } from "../../shared/components/Button";
 
 const MIN_GRID = 2;
 const MAX_GRID = 12;
@@ -132,6 +131,7 @@ const Tiles = () => {
         <div className="flex">
           <Input
             label="Grid Size"
+            className="range"
             type="range"
             min={MIN_GRID}
             max={MAX_GRID}
@@ -144,11 +144,7 @@ const Tiles = () => {
           ></Input>
           <div className="text-sm font-mono w-8">{store.gridSize}</div>
         </div>
-
         <div>
-          <Button onClick={() => fileInputRef.current?.click()}>
-            Choose file
-          </Button>
           <Input
             label="Choose file"
             ref={fileInputRef}
@@ -159,9 +155,9 @@ const Tiles = () => {
           />
         </div>
 
-        {/* <Button type="button" onClick={generate}>
-            Regenerate
-          </Button> */}
+        <div>
+          <img src={store.imageUrl ?? undefined} alt="Preview" />
+        </div>
       </div>
       <div className="flex-1 border-4 rounded-xl p-1">
         <TilesCanvas />
